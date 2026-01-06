@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 500;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #d3d3d3;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: white;
+  color: inherit;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1
+}
+
+button {
+  border-radius: 12px;
+  border: 0.5px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: white;
+  color: rgb(48, 48, 48);
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+button:hover {
+  border-color: #e6e6e63d;
+}
+button:focus,
+button:focus-visible {
+  box-shadow: #dbdbdb 0 1px 3px 1px;
+}
+
+input {
+  font-family: inherit;
+  font-size: 1em;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.25s ease-in-out;
+}
+input:focus {
+  border-color: #d3d3d3;
+  box-shadow: #dbdbdb 0 1px 3px 1px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #212121;
+  }
+  button {
+    background-color: #d1d1d1;
+  }
+}
+
+
+/* Utility classes for layout */
+.font-noto-serif {
+  font-family: "Noto Serif", serif;
+}
+
+.font-roboto {
+  font-family: "Roboto", sans-serif;
+}
