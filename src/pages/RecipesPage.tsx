@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button'
+import SpinnerEmpty from '@/components/SpinnerEmpty'
 import { searchRecipes } from '../api/spoonacular';
 
 const RecipesPage: React.FC = () => {
@@ -7,6 +9,7 @@ const RecipesPage: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!query) return;
@@ -22,7 +25,7 @@ const RecipesPage: React.FC = () => {
   }, [query]);
 
   if (!query) return <div className="p-6">Query inválida.</div>;
-  if (loading) return <div className="p-6">Carregando...</div>;
+  if (loading) return <SpinnerEmpty />;
   if (error) return <div className="p-6">{error}</div>;
 
   return (
@@ -31,33 +34,31 @@ const RecipesPage: React.FC = () => {
         <h2 className="text-2xl font-semibold">
           Resultados para "{decodeURIComponent(query)}"
         </h2>
-        <Link to="/" className="text-sm text-blue-600">
-          Voltar
-        </Link>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => navigate('/')}>Voltar</Button>
+        </div>
       </div>
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {recipes.length === 0 && (
-          <li className="p-4 bg-orange-100 rounded align-center text-center text-gray-700">
-            Nenhuma receita encontrada.
-          </li>
+          <li className="p-4 rounded text-center text-gray-700">Nenhuma receita encontrada.</li>
         )}
+
         {recipes.map(r => (
-          <li
-            key={r.id}
-            className="p-4 bg-white rounded shadow-sm flex items-center gap-4"
-          >
-            {r.image && (
-              <img
-                src={r.image}
-                alt={r.title}
-                className="w-20 h-20 object-cover rounded"
-              />
-            )}
-            <div>
-              <div className="font-semibold text-gray-800">{r.title}</div>
-              <div className="text-sm text-gray-500">
-                ID da Receita: {r.id}
+          <li key={r.id} className="bg-card p-4 rounded-lg shadow-sm">
+            <div className="flex gap-4 items-start">
+              {r.image && (
+                <img src={r.image} alt={r.title} className="w-24 h-24 object-cover rounded-md" />
+              )}
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="font-semibold text-gray-900">{r.title}</div>
+                  <div className="text-sm text-gray-500">#{r.id}</div>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">{r.sourceName || r.servings ? `${r.sourceName ?? ''} • ${r.servings ?? ''} porções` : ''}</p>
+                <div className="mt-3 flex justify-end">
+                  <Button variant="ghost" size="sm" onClick={() => navigate(`/recipes/${r.id}`)}>Ver detalhes</Button>
+                </div>
               </div>
             </div>
           </li>

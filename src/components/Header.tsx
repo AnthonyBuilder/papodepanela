@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { translateText } from '../api/translate'
+import { Button } from '@/components/ui/button'
 
 type HeaderProps = {
   onSelect?: (opt: string) => void
@@ -11,16 +11,10 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
 
-  const submitSearch = async () => {
+  const submitSearch = () => {
     const q = query.trim()
     if (!q) return
-    try {
-      const t = await translateText(q, 'en', 'auto')
-      const en = t?.text && t.ok ? t.text : q
-      navigate(`/recipes/${encodeURIComponent(en)}`)
-    } catch (e) {
-      navigate(`/recipes/${encodeURIComponent(q)}`)
-    }
+    navigate(`/recipes/${encodeURIComponent(q)}`)
   }
 
   return (
@@ -28,6 +22,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h1 className="font-noto-serif text-3xl text-orange-500">Papo de Panela</h1>
+          
           <nav className="hidden md:flex gap-2">
             {options.map((o) => (
               <button
@@ -46,13 +41,15 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
             <input
               aria-label="Pesquisar"
               placeholder="Pesquisar receitas..."
-              className="px-3 py-1 rounded-xl bg-white w-52"
+              className="px-3 py-1 rounded-md bg-white w-52"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') submitSearch() }}
             />
           </div>
-          <button className="bg-white text-gray-600 px-3 py-1 rounded-md">Entrar</button>
+          <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md" onClick={() => navigate('/login')}>
+            Entrar
+          </Button>
         </div>
       </div>
     </header>

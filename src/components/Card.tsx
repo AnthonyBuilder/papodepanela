@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 
 import UnsplashImage from './UnsplashImage'
 
@@ -34,7 +35,9 @@ const Card: React.FC<CardProps> = ({ title, description, image, query }) => {
         <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
         <p className="text-sm text-gray-500">{description || 'Uma delícia prática e saborosa.'}</p>
         <div className="mt-4 flex justify-end">
-          <button onClick={openRecipe} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded-xl">Ver</button>
+          <Button variant="default" size="sm" onClick={openRecipe}>
+            Ver
+          </Button>
         </div>
       </div>
     </article>

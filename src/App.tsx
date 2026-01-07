@@ -4,27 +4,34 @@ import Header from './components/Header'
 import Card from './components/Card'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import RecipesPage from './pages/RecipesPage'
+import LoginPage from './pages/LoginPage'
 import { getRandomRecipes } from './api/spoonacular'
+import SpinnerEmpty from '@/components/SpinnerEmpty'
 
 function App() {
   const [selected, setSelected] = useState<string | null>(null)
 
-  const [items, setItems] = useState<Array<{ title: string; description: string; image: string }>>([])
+  const [items, setItems] = useState<Array<{ title: string; description: string; image: string; id: string }>>([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const stripHtml = (html = '') => html.replace(/<[^>]*>/g, '')
 
     const loadRandom = async () => {
+      setLoading(true)
       try {
         const recipes = await getRandomRecipes(6)
         const mapped = recipes.map((r: any) => ({
           title: r.title || '',
           description: stripHtml(r.summary || '').slice(0, 120),
           image: r.image || '',
+          id: r.id || '',
         }))
         setItems(mapped)
       } catch (e) {
         console.error('Failed to load random recipes', e)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -43,19 +50,24 @@ function App() {
               <main className="max-w-6xl mx-auto px-4 py-10">
                 <div className="flex items-center justify-between mb-6">
                   <h1 className="text-3xl font-bold font-noto-serif">{selected ?? 'Receitas em destaque'}</h1>
-                  <div className="text-sm font-medium text-gray-300 uppercase">{items.length}</div>
+                  <div className="text-md font-medium text-gray-200 uppercase">{items.length}</div>
                 </div>
 
-                <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {items.map((it) => (
-                    <Card key={it.title} title={it.title} description={it.description} image={it.image} query={it.title} />
-                  ))}
-                </section>
+                {loading ? (
+                  <SpinnerEmpty />
+                ) : (
+                  <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    {items.map((it) => (
+                      <Card key={it.title} title={it.title} description={it.description} image={it.image} query={it.id} />
+                    ))}
+                  </section>
+                )}
               </main>
             </div>
           }
         />
         <Route path="/recipes/:query" element={<RecipesPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   )
