@@ -10,7 +10,7 @@ export default function SpinnerEmpty() {
           <div className="text-center">
             <Spinner className="mx-auto text-black" />
           </div>
-          <h3 className="text-lg font-semibold text-black">Processando sua solicitação</h3>
+          <h3 className="text-lg font-semibold text-black">Carregando suas receitas...</h3>
           <p className="text-sm text-muted-foreground">Aguarde enquanto processamos. Não recarregue a página.</p>
           <div className="mt-4">
             <Button variant="outline" size="lg">Cancelar</Button>
