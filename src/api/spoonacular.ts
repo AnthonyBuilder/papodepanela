@@ -62,4 +62,11 @@ export async function getRecipeInformation(id: number) {
   return res.data
 }
 
+export async function getRandomRecipes(number = 6) {
+  const res = await client.get('/recipes/random', {
+    params: { number },
+  })
+  return res.data?.recipes ?? []
+}
+
 export default client

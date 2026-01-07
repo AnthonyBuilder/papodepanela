@@ -1,45 +1,35 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './index.css'
 import Header from './components/Header'
 import Card from './components/Card'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import RecipesPage from './pages/RecipesPage'
+import { getRandomRecipes } from './api/spoonacular'
 
 function App() {
   const [selected, setSelected] = useState<string | null>(null)
 
-  const items = [
-    {
-      title: 'Strogonoff de Frango',
-      description: 'Rápido e cremoso, perfeito para a semana.',
-      image: '',
-    },
-    {
-      title: 'Panquecas Salgadas',
-      description: 'Recheie com o que preferir.',
-      image: '',
-    },
-    {
-      title: 'Escondidinho de Carne',
-      description: 'Sabor caseiro e reconfortante.',
-      image: '',
-    },
-    {
-      title: 'Salada Mediterrânea',
-      description: 'Leve e fresca para dias quentes.',
-      image: '',
-    },
-    {
-      title: 'Bolo de Cenoura',
-      description: 'Clássico com cobertura de chocolate.',
-      image: '',
-    },
-    {
-      title: 'Risoto de Cogumelos',
-      description: 'Aquele toque sofisticado com pouco esforço.',
-      image: '',
-    },
-  ]
+  const [items, setItems] = useState<Array<{ title: string; description: string; image: string }>>([])
+
+  useEffect(() => {
+    const stripHtml = (html = '') => html.replace(/<[^>]*>/g, '')
+
+    const loadRandom = async () => {
+      try {
+        const recipes = await getRandomRecipes(6)
+        const mapped = recipes.map((r: any) => ({
+          title: r.title || '',
+          description: stripHtml(r.summary || '').slice(0, 120),
+          image: r.image || '',
+        }))
+        setItems(mapped)
+      } catch (e) {
+        console.error('Failed to load random recipes', e)
+      }
+    }
+
+    loadRandom()
+  }, [])
 
   return (
     <Router>
