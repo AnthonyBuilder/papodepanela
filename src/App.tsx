@@ -43,7 +43,7 @@ function App() {
               <main className="max-w-6xl mx-auto px-4 py-10">
                 <div className="flex items-center justify-between mb-6">
                   <h1 className="text-3xl font-bold font-noto-serif">{selected ?? 'Receitas em destaque'}</h1>
-                  <div className="text-sm font-medium text-gray-300 uppercase">Encontradas: {items.length}</div>
+                  <div className="text-sm font-medium text-gray-300 uppercase">{items.length}</div>
                 </div>
 
                 <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
