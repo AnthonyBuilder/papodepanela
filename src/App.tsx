@@ -64,11 +64,13 @@ function App() {
           element={
             <div className="min-h-screen bg-white text-black">
               <main className="max-w-6xl mx-auto px-4 py-10">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-2">
                   <h1 className="text-3xl font-bold font-noto-serif">{selected ?? 'Receitas em destaque'}</h1>
                   <div className="text-md font-medium text-gray-200 uppercase">{items.length}</div>
                 </div>
-
+                <div className='flex mb-6'>
+                  <caption className="text-sm text-gray-500 mb-4">Receitas selecionadas aleatoriamente do nosso repositório.</caption>
+                </div>
                 {loading ? (
                   <SpinnerEmpty />
                 ) : (
