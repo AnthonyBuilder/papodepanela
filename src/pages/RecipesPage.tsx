@@ -57,7 +57,7 @@ const RecipesPage: React.FC = () => {
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">{r.sourceName || r.servings ? `${r.sourceName ?? ''} • ${r.servings ?? ''} porções` : ''}</p>
                 <div className="mt-3 flex justify-end">
-                  <Button variant="ghost" size="sm" onClick={() => navigate(`/recipes/${r.id}`)}>Ver detalhes</Button>
+                  <Button variant="ghost" size="sm" onClick={() => navigate(`/recipe/${r.id}`)}>Ver detalhes</Button>
                 </div>
               </div>
             </div>

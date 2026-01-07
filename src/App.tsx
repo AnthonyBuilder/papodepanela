@@ -5,6 +5,7 @@ import Card from './components/Card'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import RecipesPage from './pages/RecipesPage'
 import LoginPage from './pages/LoginPage'
+import RecipePage from './pages/RecipePage'
 import { getRandomRecipes } from './api/spoonacular'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 
@@ -67,6 +68,7 @@ function App() {
           }
         />
         <Route path="/recipes/:query" element={<RecipesPage />} />
+        <Route path="/recipe/:id" element={<RecipePage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>

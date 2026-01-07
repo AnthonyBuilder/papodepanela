@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({ title, description, image, query }) => {
 
   const openRecipe = () => {
     const q = encodeURIComponent(query ?? title)
-    navigate(`/recipes/${q}`)
+    navigate(`/recipe/${q}`)
   }
 
   return (
