@@ -10,7 +10,7 @@ const client = axios.create({
   },
 })
 
-export async function searchRecipes(query: string, number = 10) {
+export async function searchRecipes(query: string, number = 10, uiLocale = 'pt') {
   const originalQuery = query
   let enQuery = originalQuery
   let translationFailed = false
@@ -37,14 +37,14 @@ export async function searchRecipes(query: string, number = 10) {
     const translated = await Promise.all(
       data.results.map(async (r: any) => {
         try {
-          const tTitle = await translateText(r.title || '', 'pt', 'en')
-          const titlePt = tTitle.text || r.title
-          if ((r.title || '') === titlePt) {
+          const tTitle = await translateText(r.title || '', uiLocale, 'en')
+          const titleLocale = tTitle.text || r.title
+          if ((r.title || '') === titleLocale) {
             console.log('[searchRecipes] title not changed', r.title)
           } else {
-            console.log('[searchRecipes] translated title', r.title, '->', titlePt)
+            console.log('[searchRecipes] translated title', r.title, '->', titleLocale)
           }
-          return { ...r, title: titlePt }
+          return { ...r, title: titleLocale }
         } catch (e) {
           console.error('translate title failed', e)
           return r

@@ -7,10 +7,13 @@ import RecipesPage from './pages/RecipesPage'
 import LoginPage from './pages/LoginPage'
 import RecipePage from './pages/RecipePage'
 import { getRandomRecipes } from './api/spoonacular'
+import { useLanguage, translateForLocale } from './context/LanguageContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
+import Footer from '@/components/Footer'
 
 function App() {
   const [selected, setSelected] = useState<string | null>(null)
+  const { locale } = useLanguage()
 
   const [items, setItems] = useState<Array<{ title: string; description: string; image: string; id: string }>>([])
   const [loading, setLoading] = useState(false)
@@ -28,7 +31,19 @@ function App() {
           image: r.image || '',
           id: r.id || '',
         }))
-        setItems(mapped)
+        // translate if UI locale is not English
+        if (locale !== 'en') {
+          const translated = await Promise.all(
+            mapped.map(async (m) => ({
+              ...m,
+              title: await translateForLocale(m.title, locale),
+              description: await translateForLocale(m.description, locale),
+            }))
+          )
+          setItems(translated)
+        } else {
+          setItems(mapped)
+        }
       } catch (e) {
         console.error('Failed to load random recipes', e)
       } finally {
@@ -41,13 +56,13 @@ function App() {
 
   return (
     <Router>
-      <Routes>
+      <Header onSelect={(o) => setSelected(o)} />
+      <div className="pt-20">
+        <Routes>
         <Route
           path="/"
           element={
             <div className="min-h-screen bg-white text-black">
-              <Header onSelect={(o) => setSelected(o)} />
-
               <main className="max-w-6xl mx-auto px-4 py-10">
                 <div className="flex items-center justify-between mb-6">
                   <h1 className="text-3xl font-bold font-noto-serif">{selected ?? 'Receitas em destaque'}</h1>
@@ -70,7 +85,9 @@ function App() {
         <Route path="/recipes/:query" element={<RecipesPage />} />
         <Route path="/recipe/:id" element={<RecipePage />} />
         <Route path="/login" element={<LoginPage />} />
-      </Routes>
+        </Routes>
+      </div>
+      <Footer />
     </Router>
   )
 }

@@ -35,9 +35,9 @@ export default function RecipePage() {
   if (!recipe) return null
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10 text-gray-600">
+    <div className="max-w-4xl mx-auto px-4 py-10 text-gray-500">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{recipe.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-800 font-noto-serif">{recipe.title}</h1>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => navigate(-1)}>Voltar</Button>
         </div>

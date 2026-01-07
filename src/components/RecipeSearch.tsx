@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { searchRecipes } from '../api/spoonacular'
+import { useLanguage } from '@/context/LanguageContext'
 
 export default function RecipeSearch() {
   const [query, setQuery] = useState('')
@@ -8,6 +9,7 @@ export default function RecipeSearch() {
   const [error, setError] = useState<string | null>(null)
   const [translationWarning, setTranslationWarning] = useState<string | null>(null)
   const [translatedQuery, setTranslatedQuery] = useState<string | null>(null)
+  const { locale } = useLanguage() // Added to get the locale
 
   const onSearch = async () => {
     if (!query) return
@@ -16,7 +18,7 @@ export default function RecipeSearch() {
     setTranslationWarning(null)
     setTranslatedQuery(null)
     try {
-      const data = await searchRecipes(query, 12)
+      const data = await searchRecipes(query, 12, locale) // Updated to include locale
       setResults(data.results || [])
       setTranslatedQuery((data as any).enQuery || null)
       if (data.translationFailed) {
@@ -29,17 +31,19 @@ export default function RecipeSearch() {
     }
   }
 
+  const { t } = useLanguage()
+
   return (
     <div className="p-4">
       <div className="flex gap-2 mb-4">
         <input
           className="border rounded px-2 py-1 flex-1"
-          placeholder="Buscar receitas..."
+          placeholder={t('searchPlaceholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <button className="bg-blue-600 text-white px-3 rounded" onClick={onSearch}>
-          {loading ? 'Buscando...' : 'Buscar'}
+          {loading ? 'Buscando...' : t('enter')}
         </button>
       </div>
 

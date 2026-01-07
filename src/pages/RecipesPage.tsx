@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button'
+import { useLanguage } from '@/context/LanguageContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import { searchRecipes } from '../api/spoonacular';
 
@@ -10,13 +11,14 @@ const RecipesPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate()
+  const { locale } = useLanguage()
 
   useEffect(() => {
     if (!query) return;
     const q = decodeURIComponent(query);
     setLoading(true);
     setError(null);
-    searchRecipes(q, 12)
+    searchRecipes(q, 12, locale)
       .then(data => {
         setRecipes(data.results || []);
       })
