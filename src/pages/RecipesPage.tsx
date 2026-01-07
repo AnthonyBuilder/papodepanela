@@ -38,7 +38,7 @@ const RecipesPage: React.FC = () => {
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {recipes.length === 0 && (
-          <li className="p-4 bg-gray-50 rounded">
+          <li className="p-4 bg-orange-100 rounded align-center text-center text-gray-700">
             Nenhuma receita encontrada.
           </li>
         )}
@@ -55,8 +55,10 @@ const RecipesPage: React.FC = () => {
               />
             )}
             <div>
-              <div className="font-semibold">{r.title}</div>
-              <div className="text-sm text-gray-500">ID: {r.id}</div>
+              <div className="font-semibold text-gray-800">{r.title}</div>
+              <div className="text-sm text-gray-500">
+                ID da Receita: {r.id}
+              </div>
             </div>
           </li>
         ))}

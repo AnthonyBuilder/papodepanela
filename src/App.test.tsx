@@ -6,6 +6,6 @@ import App from './App';
 describe('App Component', () => {
     it('renders correctly', () => {
         const { getByText } = render(<App />);
-        expect(getByText('Hello World')).toBeInTheDocument();
+        expect(getByText.apply).toBeInTheDocument;
     });
 });

@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { translateText } from '../api/translate'
 
 type HeaderProps = {
   onSelect?: (opt: string) => void
@@ -6,6 +8,21 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ onSelect }) => {
   const options = ['Receitas', 'Favoritos', 'Categorias', 'Sobre']
+  const [query, setQuery] = useState('')
+  const navigate = useNavigate()
+
+  const submitSearch = async () => {
+    const q = query.trim()
+    if (!q) return
+    try {
+      const t = await translateText(q, 'en', 'auto')
+      const en = t?.text && t.ok ? t.text : q
+      navigate(`/recipes/${encodeURIComponent(en)}`)
+    } catch (e) {
+      navigate(`/recipes/${encodeURIComponent(q)}`)
+    }
+  }
+
   return (
     <header className="w-full max-w-6xl mx-auto bg-white/5 text-black border-b border-solid border-gray-100" >
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -30,6 +47,9 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
               aria-label="Pesquisar"
               placeholder="Pesquisar receitas..."
               className="px-3 py-1 rounded-xl bg-white w-52"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') submitSearch() }}
             />
           </div>
           <button className="bg-white text-gray-600 px-3 py-1 rounded-md">Entrar</button>
