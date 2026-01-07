@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 
 import UnsplashImage from './UnsplashImage'
+import { Bookmark } from 'lucide-react'
 
 type CardProps = {
   title: string
@@ -21,7 +22,7 @@ const Card: React.FC<CardProps> = ({ title, description, image, query }) => {
   }
 
   return (
-    <article className="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden shadow-sm border">
+    <article className="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden shadow-sm border flex flex-col h-full">
       <div className="h-44 w-full bg-gray-200/20 relative overflow-hidden">
         {image && !imgError ? (
           <img src={image} alt={title} className="object-cover w-full h-full" loading="lazy" onError={() => setImgError(true)} />
@@ -31,13 +32,21 @@ const Card: React.FC<CardProps> = ({ title, description, image, query }) => {
           <div className="flex items-center justify-center w-full h-full text-3xl bg-white/5">🍲</div>
         )}
       </div>
-      <div className="p-4">
-        <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
+      <div className="p-4 flex flex-col flex-1">
+        <h2 className="text-lg md:text-xl font-semibold">{title}</h2>
         <p className="text-sm text-gray-500">{description || 'Uma delícia prática e saborosa.'}</p>
-        <div className="mt-4 flex justify-end">
-          <Button variant="default" size="sm" onClick={openRecipe}>
+        <h4 className="text-sm text-gray-400 mt-2">#PapoDePanela</h4>
+        <div className="flex flex-col gap-2 mt-auto">
+
+          <div className="flex gap-2 mt-4">
+            <Button variant="default" size="sm" className='flex-1 bg-amber-800' onClick={openRecipe}>
+              <Bookmark className="w-4 h-4 mr-2" />
+            Salvar para depois
+          </Button>
+          <Button variant="default" size="sm" className='flex-1' onClick={openRecipe}>
             Ver
           </Button>
+          </div>
         </div>
       </div>
     </article>

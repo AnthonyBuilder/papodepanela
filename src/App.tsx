@@ -24,7 +24,7 @@ function App() {
     const loadRandom = async () => {
       setLoading(true)
       try {
-        const recipes = await getRandomRecipes(6)
+        const recipes = await getRandomRecipes(9)
         const mapped = recipes.map((r: any) => ({
           title: r.title || '',
           description: stripHtml(r.summary || '').slice(0, 120),
@@ -34,7 +34,7 @@ function App() {
         // translate if UI locale is not English
         if (locale !== 'en') {
           const translated = await Promise.all(
-            mapped.map(async (m) => ({
+            mapped.map(async (m: { title: string; description: string; image: string; id: string }) => ({
               ...m,
               title: await translateForLocale(m.title, locale),
               description: await translateForLocale(m.description, locale),
