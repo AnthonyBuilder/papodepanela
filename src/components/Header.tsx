@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
               <button
                 key={o}
                 onClick={() => onSelect && onSelect(o)}
-                className="px-3 py-1 rounded-md hover:bg-white/20"
+                className="px-3 py-1 opacity-80 rounded-xl hover:bg-white/20"
               >
                 {o}
               </button>
@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
             <input
               aria-label="Pesquisar"
               placeholder={t('searchPlaceholder')}
-              className="px-3 py-1 rounded-md bg-white w-52 opacity-80 text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="px-3 py-1 rounded-xl bg-white w-52 opacity-80 text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') submitSearch() }}
@@ -52,12 +52,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <select value={locale} onChange={(e) => setLocale(e.target.value as any)} className="rounded-md px-2 py-1 text-sm bg-white border border-gray-300">
-              <option value="pt">PT</option>
-              <option value="en">EN</option>
-              <option value="es">ES</option>
-            </select>
-            <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md" onClick={() => navigate('/login')}>
+            <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md rounded-xl" onClick={() => navigate('/login')}>
               {t('login')}
             </Button>
           </div>
