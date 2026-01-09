@@ -8,17 +8,22 @@ type HeaderProps = {
 }
 
 const Header: React.FC<HeaderProps> = ({ onSelect }) => {
-  const options = ['Receitas', 'Favoritos', 'Categorias', 'Sobre']
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
+  const { t } = useLanguage()
+
+  const options = [
+    { key: 'recipes', label: t('recipes') || 'Receitas' },
+    { key: 'favorites', label: t('favorites') || 'Favoritos' },
+    { key: 'categories', label: t('categories') || 'Categorias' },
+    { key: 'about', label: t('aboutMenu') || 'Sobre' },
+  ]
 
   const submitSearch = () => {
     const q = query.trim()
     if (!q) return
     navigate(`/recipes/${encodeURIComponent(q)}`)
   }
-
-  const { locale, setLocale, t } = useLanguage()
 
   return (
     <header className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-sm text-black border-b border-solid border-gray-100 z-50">
@@ -29,11 +34,11 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
           <nav className="hidden md:flex gap-2">
             {options.map((o) => (
               <button
-                key={o}
-                onClick={() => onSelect && onSelect(o)}
+                key={o.key}
+                onClick={() => onSelect && onSelect(o.label)}
                 className="px-3 py-1 opacity-80 rounded-xl hover:bg-white/20"
               >
-                {o}
+                {o.label}
               </button>
             ))}
           </nav>

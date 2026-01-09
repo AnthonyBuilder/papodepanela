@@ -1,4 +1,3 @@
-import React from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 
 export default function Footer() {
@@ -14,17 +13,17 @@ export default function Footer() {
         </div>
 
         <div className="text-sm text-gray-500">
-          <div>Sobre: Papo de Panela é um repositório de receitas.</div>
-          <div>Contato: contato@papodepanela.local</div>
+          <div>{t('about')}</div>
+          <div>{t('contact')}</div>
         </div>
 
         
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600">Idioma</label>
+          <label className="text-sm text-gray-600">{t('language')}</label>
           <select value={locale} onChange={(e) => setLocale(e.target.value as any)} className="rounded-md px-2 py-1 text-black text-sm bg-white border border-gray-300">
-            <option value="pt">Português</option>
-            <option value="en">English</option>
-            <option value="es">Español</option>
+            <option value="pt">{t('portuguese')}</option>
+            <option value="en">{t('english')}</option>
+            <option value="es">{t('spanish')}</option>
           </select>
         </div>
       </div>

@@ -13,10 +13,20 @@ import Footer from '@/components/Footer'
 
 function App() {
   const [selected, setSelected] = useState<string | null>(null)
-  const { locale } = useLanguage()
+  const { locale, t } = useLanguage()
 
   const [items, setItems] = useState<Array<{ title: string; description: string; image: string; id: string }>>([])
   const [loading, setLoading] = useState(false)
+
+  // Set document language for browser translation
+  useEffect(() => {
+    const langMap: Record<string, string> = {
+      pt: 'pt-BR',
+      en: 'en-US',
+      es: 'es-ES',
+    }
+    document.documentElement.lang = langMap[locale] || locale
+  }, [locale])
 
   useEffect(() => {
     const stripHtml = (html = '') => html.replace(/<[^>]*>/g, '')
@@ -52,7 +62,7 @@ function App() {
     }
 
     loadRandom()
-  }, [])
+  }, [locale])
 
   return (
     <Router>
@@ -65,11 +75,11 @@ function App() {
             <div className="min-h-screen bg-white text-black">
               <main className="max-w-6xl mx-auto px-4 py-10">
                 <div className="flex items-center justify-between mb-2">
-                  <h1 className="text-3xl font-bold font-noto-serif">{selected ?? 'Receitas em destaque'}</h1>
+                  <h1 className="text-3xl font-bold font-noto-serif">{selected ?? t('randomRecipes')}</h1>
                   <div className="text-md font-medium text-gray-200 uppercase">{items.length}</div>
                 </div>
                 <div className='flex mb-6'>
-                  <caption className="text-sm text-gray-500 mb-4">Receitas selecionadas aleatoriamente do nosso repositório.</caption>
+                  <caption className="text-sm text-gray-500 mb-4">{t('randomRecipesDesc')}</caption>
                 </div>
                 {loading ? (
                   <SpinnerEmpty />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { searchRecipes } from '../api/spoonacular'
 import { useLanguage } from '@/context/LanguageContext'
 
@@ -22,10 +22,10 @@ export default function RecipeSearch() {
       setResults(data.results || [])
       setTranslatedQuery((data as any).enQuery || null)
       if (data.translationFailed) {
-        setTranslationWarning('Não foi possível traduzir o termo; buscando com o termo original.')
+        setTranslationWarning(t('translationFailed') || 'Não foi possível traduzir o termo; buscando com o termo original.')
       }
     } catch (e) {
-      setError('Erro ao buscar receitas')
+      setError(t('searchError'))
     } finally {
       setLoading(false)
     }
@@ -43,14 +43,14 @@ export default function RecipeSearch() {
           onChange={(e) => setQuery(e.target.value)}
         />
         <button className="bg-blue-600 text-white px-3 rounded" onClick={onSearch}>
-          {loading ? 'Buscando...' : t('enter')}
+          {loading ? t('searching') || 'Buscando...' : t('enter')}
         </button>
       </div>
 
       {error && <div className="text-red-600 mb-2">{error}</div>}
       {translationWarning && <div className="text-yellow-600 mb-2">{translationWarning}</div>}
       {translatedQuery && (
-        <div className="text-sm text-gray-600 mb-2">Buscando por: {translatedQuery}</div>
+        <div className="text-sm text-gray-600 mb-2">{t('searchingFor') || 'Buscando por'}: {translatedQuery}</div>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
