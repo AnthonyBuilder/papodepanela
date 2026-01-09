@@ -10,6 +10,7 @@ import { getRandomRecipes } from './api/spoonacular'
 import { useLanguage, translateForLocale } from './context/LanguageContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import Footer from '@/components/Footer'
+import { Analytics } from '@vercel/analytics/react'
 
 function App() {
   const [selected, setSelected] = useState<string | null>(null)
@@ -100,6 +101,7 @@ function App() {
         </Routes>
       </div>
       <Footer />
+      <Analytics />
     </Router>
   )
 }
