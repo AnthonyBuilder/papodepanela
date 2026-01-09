@@ -10,6 +10,7 @@ import { getRandomRecipes } from './api/spoonacular'
 import { useLanguage, translateForLocale } from './context/LanguageContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import Footer from '@/components/Footer'
+import { Analytics } from "@vercel/analytics/next"
 
 function App() {
   const [selected, setSelected] = useState<string | null>(null)
@@ -79,7 +80,7 @@ function App() {
                   <div className="text-md font-medium text-gray-200 uppercase">{items.length}</div>
                 </div>
                 <div className='flex mb-6'>
-                  <caption className="text-sm text-gray-500 mb-4">{t('randomRecipesDesc')}</caption>
+                  <p className="text-sm text-gray-500 mb-4">{t('randomRecipesDesc')}</p>
                 </div>
                 {loading ? (
                   <SpinnerEmpty />
@@ -100,6 +101,7 @@ function App() {
         </Routes>
       </div>
       <Footer />
+      <Analytics />
     </Router>
   )
 }
