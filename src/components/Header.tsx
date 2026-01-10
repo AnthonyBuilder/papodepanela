@@ -2,28 +2,25 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/context/LanguageContext'
+import { auth } from '@/lib/firebase'
+import { LogOut } from 'lucide-react'
 
 type HeaderProps = {
   onSelect?: (opt: string) => void
 }
 
 const Header: React.FC<HeaderProps> = ({ onSelect }) => {
+  const options = ['Receitas', 'Favoritos', 'Categorias', 'Sobre']
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
-  const { t } = useLanguage()
-
-  const options = [
-    { key: 'recipes', label: t('recipes') || 'Receitas' },
-    { key: 'favorites', label: t('favorites') || 'Favoritos' },
-    { key: 'categories', label: t('categories') || 'Categorias' },
-    { key: 'about', label: t('aboutMenu') || 'Sobre' },
-  ]
 
   const submitSearch = () => {
     const q = query.trim()
     if (!q) return
     navigate(`/recipes/${encodeURIComponent(q)}`)
   }
+
+  const { locale, setLocale, t } = useLanguage()
 
   return (
     <header className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-sm text-black border-b border-solid border-gray-100 z-50">
@@ -34,11 +31,11 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
           <nav className="hidden md:flex gap-2">
             {options.map((o) => (
               <button
-                key={o.key}
-                onClick={() => onSelect && onSelect(o.label)}
+                key={o}
+                onClick={() => onSelect && onSelect(o)}
                 className="px-3 py-1 opacity-80 rounded-xl hover:bg-white/20"
               >
-                {o.label}
+                {o}
               </button>
             ))}
           </nav>
@@ -57,9 +54,17 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md rounded-xl" onClick={() => navigate('/login')}>
+            
+           
+            {auth.currentUser ? (
+              <><span className="text-sm text-gray-600">{auth.currentUser.displayName}</span><Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-1" onClick={() => auth.signOut().then(() => navigate('/'))}>
+                <LogOut className="w-4 h-4" />
+                {t('logout')}
+              </Button></>
+            ) : 
+             <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md rounded-xl" onClick={() => navigate('/login')}>
               {t('login')}
-            </Button>
+            </Button>}
           </div>
         </div>
       </div>

@@ -21,6 +21,10 @@ const Card: React.FC<CardProps> = ({ title, description, image, query }) => {
     navigate(`/recipe/${q}`)
   }
 
+  const saveRecipe = () => {
+    alert('Funcionalidade de salvar receita ainda não implementada.')
+  }
+
   return (
     <article className="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden shadow-sm border flex flex-col h-full">
       <div className="h-44 w-full bg-gray-200/20 relative overflow-hidden">
@@ -39,7 +43,7 @@ const Card: React.FC<CardProps> = ({ title, description, image, query }) => {
         <div className="flex flex-col gap-2 mt-auto">
 
           <div className="flex gap-2 mt-4">
-            <Button variant="default" size="sm" className='flex-1 bg-amber-800' onClick={openRecipe}>
+            <Button variant="default" size="sm" className='flex-1 bg-amber-800' onClick={saveRecipe}>
               <Bookmark className="w-4 h-4 mr-2" />
             Salvar para depois
           </Button>
