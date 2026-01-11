@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getRecipeInformation } from '../api/spoonacular'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import { Button } from '@/components/ui/button'
-import { useLanguage, translateForLocale } from '@/context/LanguageContext'
+import { useLanguage } from '@/context/LanguageContext'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
 
@@ -25,78 +25,7 @@ export default function RecipePage() {
       setError(null)
       try {
         const data = await getRecipeInformation(Number(id))
-        
-        // Translate recipe content if locale is not English (preserve full text, no abbreviations)
-        if (locale !== 'en') {
-          const translatedData = { ...data }
-
-          // Translate title
-          if (data.title) {
-            translatedData.title = await translateForLocale(data.title, locale)
-          }
-
-          // Translate summary (strip HTML tags before translating)
-          if (data.summary) {
-            const plainSummary = data.summary.replace(/<[^>]*>/g, '')
-            const translated = await translateForLocale(plainSummary, locale)
-            translatedData.summary = `<p>${translated}</p>`
-          }
-
-          // Translate ingredients (each item to avoid truncation)
-          if (Array.isArray(data.extendedIngredients)) {
-            translatedData.extendedIngredients = await Promise.all(
-              data.extendedIngredients.map(async (ing: any) => ({
-                ...ing,
-                original: ing.original
-                  ? await translateForLocale(ing.original, locale)
-                  : ing.original,
-              }))
-            )
-          }
-
-          // Translate cuisines and diets labels
-          if (Array.isArray(data.cuisines)) {
-            translatedData.cuisines = await Promise.all(
-              data.cuisines.map((c: string) => translateForLocale(c, locale))
-            )
-          }
-
-          if (Array.isArray(data.diets)) {
-            translatedData.diets = await Promise.all(
-              data.diets.map((d: string) => translateForLocale(d, locale))
-            )
-          }
-
-          // Translate instructions step-by-step to keep full detail
-          if (Array.isArray(data.analyzedInstructions)) {
-            translatedData.analyzedInstructions = await Promise.all(
-              data.analyzedInstructions.map(async (instr: any) => ({
-                ...instr,
-                steps: Array.isArray(instr.steps)
-                  ? await Promise.all(
-                      instr.steps.map(async (step: any) => ({
-                        ...step,
-                        step: step.step
-                          ? await translateForLocale(step.step, locale)
-                          : step.step,
-                      }))
-                    )
-                  : instr.steps,
-              }))
-            )
-          }
-
-          // Translate plain instructions block (if present)
-          if (data.instructions) {
-            const plainInstructions = data.instructions.replace(/<[^>]*>/g, '')
-            const translated = await translateForLocale(plainInstructions, locale)
-            translatedData.instructions = translated
-          }
-
-          setRecipe(translatedData)
-        } else {
-          setRecipe(data)
-        }
+        setRecipe(data)
       } catch (e) {
         console.error('getRecipeInformation failed', e)
         setError(t('loadError'))
@@ -105,7 +34,7 @@ export default function RecipePage() {
       }
     }
     load()
-  }, [id, locale, t])
+  }, [id, t])
 
   if (!id) return <div className="p-6">{t('invalidId')}</div>
   if (loading) return <SpinnerEmpty />
@@ -186,7 +115,7 @@ export default function RecipePage() {
 
         {recipe.cuisines && recipe.cuisines.length > 0 && (
           <div>
-            <h3 className="text-xl font-semibold mb-3 text-gray-800">Cuisines</h3>
+            <h3 className="text-xl font-semibold mb-3 text-gray-800">{locale === 'pt' ? 'Cozinhas' : locale === 'es' ? 'Cocinas' : 'Cuisines'}</h3>
             <div className="flex flex-wrap gap-2">
               {recipe.cuisines.map((cuisine: string) => (
                 <span key={cuisine} className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">{cuisine}</span>
@@ -197,7 +126,7 @@ export default function RecipePage() {
 
         {recipe.diets && recipe.diets.length > 0 && (
           <div>
-            <h3 className="text-xl font-semibold mb-3 text-gray-800">Diets</h3>
+            <h3 className="text-xl font-semibold mb-3 text-gray-800">{locale === 'pt' ? 'Dietas' : locale === 'es' ? 'Dietas' : 'Diets'}</h3>
             <div className="flex flex-wrap gap-2">
               {recipe.diets.map((diet: string) => (
                 <span key={diet} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">{diet}</span>
@@ -208,7 +137,7 @@ export default function RecipePage() {
 
         {recipe.analyzedInstructions && recipe.analyzedInstructions.length > 0 && (
           <div>
-            <h3 className="text-xl font-semibold mb-3 text-gray-800">Steps</h3>
+            <h3 className="text-xl font-semibold mb-3 text-gray-800">{t('instructions')}</h3>
             {recipe.analyzedInstructions.map((instruction: any, idx: number) => (
               <div key={idx} className="space-y-2">
                 {instruction.steps && instruction.steps.map((step: any, stepIdx: number) => (

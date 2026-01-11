@@ -116,19 +116,24 @@ export async function searchRecipes(query: string, number = 8, uiLocale = 'pt') 
   }
 }
 
-export async function getRecipeInformation(id: number) {
-  if (infoCache.has(id)) return infoCache.get(id)
-  const res = await client.get(`/recipes/${id}/information`)
-  infoCache.set(id, res.data)
+export async function getRecipeInformation(id: number, language = 'en') {
+  const key = `${id}:${language}`
+  if (infoCache.has(key)) return infoCache.get(key)
+  
+  const res = await client.get(`/recipes/${id}/information`, {
+    params: { language },
+  })
+  infoCache.set(key, res.data)
   return res.data
 }
 
-export async function getRandomRecipes(number = 4) {
+export async function getRandomRecipes(number = 4, language = 'en') {
   // in-memory cache
+  const cacheKey = `random:${number}:${language}`
   if (randomCache.has(number)) return randomCache.get(number)!
 
   // check localStorage with TTL
-  const lsKey = `random:${number}`
+  const lsKey = cacheKey
   const lsVal = localStorageGet(lsKey)
   if (lsVal && lsVal.ts && Date.now() - lsVal.ts < RANDOM_TTL) {
     randomCache.set(number, lsVal.data)
@@ -140,7 +145,7 @@ export async function getRandomRecipes(number = 4) {
 
   const promise = (async () => {
     const res = await client.get('/recipes/random', {
-      params: { number },
+      params: { number, language },
     })
     const recipes = res.data?.recipes ?? []
     randomCache.set(number, recipes)
@@ -159,8 +164,8 @@ export async function getRandomRecipes(number = 4) {
   }
 }
 
-export async function getRecipesByCuisine(cuisine: string, number = 6) {
-  const key = `${cuisine}:${number}`
+export async function getRecipesByCuisine(cuisine: string, number = 6, language = 'en') {
+  const key = `${cuisine}:${number}:${language}`
 
   if (categoryCache.has(key)) return categoryCache.get(key)!
 
@@ -172,6 +177,7 @@ export async function getRecipesByCuisine(cuisine: string, number = 6) {
         number,
         cuisine,
         addRecipeInformation: true,
+        language,
       },
     })
     const recipes = res.data?.results ?? []

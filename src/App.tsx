@@ -40,30 +40,25 @@ function App() {
     const loadRandom = async () => {
       setLoading(true)
       try {
-        const recipes = await getRandomRecipes(9)
+        // Mapa de locale para language code Spoonacular
+        const languageMap: Record<string, string> = {
+          pt: 'pt',
+          en: 'en',
+          es: 'es',
+        }
+        const spoonacularLanguage = languageMap[locale] || 'en'
+        
+        const recipes = await getRandomRecipes(9, spoonacularLanguage)
         const mapped = recipes.map((r: any) => ({
           title: r.title || '',
           description: stripHtml(r.summary || '').slice(0, 120),
           image: r.image || '',
           id: r.id || '',
         }))
-        // translate if UI locale is not English
-        if (locale !== 'en') {
-          const translated = await Promise.all(
-            mapped.map(async (m: { title: string; description: string; image: string; id: string }) => ({
-              ...m,
-              title: await translateForLocale(m.title, locale),
-              description: await translateForLocale(m.description, locale),
-            }))
-          )
-          setItems(translated)
-          // Use primeiras 5 receitas para o slider de destaques
-          setFeaturedRecipes(translated.slice(0, 5))
-        } else {
-          setItems(mapped)
-          // Use primeiras 5 receitas para o slider de destaques
-          setFeaturedRecipes(mapped.slice(0, 5))
-        }
+        
+        setItems(mapped)
+        // Use primeiras 5 receitas para o slider de destaques
+        setFeaturedRecipes(mapped.slice(0, 5))
       } catch (e) {
         console.error('Failed to load random recipes', e)
       } finally {
@@ -94,27 +89,24 @@ function App() {
     const loadCategories = async () => {
       setCategoryLoading(true)
       try {
+        // Mapa de locale para language code Spoonacular
+        const languageMap: Record<string, string> = {
+          pt: 'pt',
+          en: 'en',
+          es: 'es',
+        }
+        const spoonacularLanguage = languageMap[locale] || 'en'
+        
         const sections = await Promise.all(
           categories.map(async (cuisine) => {
             try {
-              const recipes = await getRecipesByCuisine(cuisine, 4)
+              const recipes = await getRecipesByCuisine(cuisine, 4, spoonacularLanguage)
               const mapped = recipes.map((r: any) => ({
                 title: r.title || '',
                 description: stripHtml(r.summary || '').slice(0, 120),
                 image: r.image || '',
                 id: r.id || '',
               }))
-
-              if (locale !== 'en') {
-                const translated = await Promise.all(
-                  mapped.map(async (m: { title: string; description: string; image: string; id: string }) => ({
-                    ...m,
-                    title: await translateForLocale(m.title, locale),
-                    description: await translateForLocale(m.description, locale),
-                  }))
-                )
-                return { label: labelFor(cuisine), items: translated }
-              }
 
               return { label: labelFor(cuisine), items: mapped }
             } catch (e) {
