@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 
 import UnsplashImage from './UnsplashImage'
-import { Bookmark } from 'lucide-react'
+import { Bookmark, BookmarkCheck } from 'lucide-react'
+import { useSavedRecipes } from '@/context/SavedRecipesContext'
+import { useAuth } from '@/context/AuthContext'
 
 type CardProps = {
   title: string
@@ -14,15 +16,38 @@ type CardProps = {
 
 const Card: React.FC<CardProps> = ({ title, description, image, query }) => {
   const [imgError, setImgError] = useState(false)
+  const [saving, setSaving] = useState(false)
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const { isSaved, toggleRecipe } = useSavedRecipes()
+
+  const recipeId = query || title.replace(/\s+/g, '-').toLowerCase()
+  const isRecipeSaved = isSaved(recipeId)
 
   const openRecipe = () => {
     const q = encodeURIComponent(query ?? title)
     navigate(`/recipe/${q}`)
   }
 
-  const saveRecipe = () => {
-    alert('Funcionalidade de salvar receita ainda não implementada.')
+  const saveRecipe = async () => {
+    if (!user) {
+      navigate('/login')
+      return
+    }
+
+    setSaving(true)
+    try {
+      await toggleRecipe({
+        id: recipeId,
+        title,
+        image,
+        savedAt: new Date().toISOString(),
+      })
+    } catch (err) {
+      console.error('Error saving recipe:', err)
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -42,14 +67,24 @@ const Card: React.FC<CardProps> = ({ title, description, image, query }) => {
         <h4 className="text-sm text-gray-400 mt-2">#PapoDePanela</h4>
         <div className="flex flex-col gap-2 mt-auto">
 
-          <div className="flex gap-2 mt-4">
-            <Button variant="default" size="sm" className='flex-1 bg-amber-800' onClick={saveRecipe}>
-              <Bookmark className="w-4 h-4 mr-2" />
-            Salvar para depois
-          </Button>
-          <Button variant="default" size="sm" className='flex-1' onClick={openRecipe}>
-            Ver
-          </Button>
+          <div className="flex gap-2 mt-4 text-white">
+            <Button 
+              variant={isRecipeSaved ? "secondary" : "default"} 
+              size="sm" 
+              className='flex-1 bg-gray-800 text-gray-200 hover:bg-green-800 hover:text-green-600' 
+              onClick={saveRecipe}
+              disabled={saving}
+            >
+              {isRecipeSaved ? (
+                <BookmarkCheck className="w-4 h-4 mr-2 text-green-500" />
+              ) : (
+                <Bookmark className="w-4 h-4 mr-2 text-gray-200" />
+              )}
+              {saving ? '...' : isRecipeSaved ? 'Salva' : 'Salvar'}
+            </Button>
+            <Button variant="default" size="sm" className='flex-1' onClick={openRecipe}>
+              Ver
+            </Button>
           </div>
         </div>
       </div>

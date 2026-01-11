@@ -17,6 +17,8 @@ const RANDOM_TTL = 1000 * 60 * 60 // 1 hour
 const infoCache = new Map<number, any>()
 const searchCache = new Map<string, any>()
 const searchPromiseCache = new Map<string, Promise<any>>()
+const categoryCache = new Map<string, any[]>()
+const categoryPromiseCache = new Map<string, Promise<any[]>>()
 
 function localStorageGet(key: string) {
   try {
@@ -35,7 +37,7 @@ function localStorageSet(key: string, value: any) {
   }
 }
 
-export async function searchRecipes(query: string, number = 10, uiLocale = 'pt') {
+export async function searchRecipes(query: string, number = 8, uiLocale = 'pt') {
   const originalQuery = query
   let enQuery = originalQuery
   let translationFailed = false
@@ -121,7 +123,7 @@ export async function getRecipeInformation(id: number) {
   return res.data
 }
 
-export async function getRandomRecipes(number = 6) {
+export async function getRandomRecipes(number = 4) {
   // in-memory cache
   if (randomCache.has(number)) return randomCache.get(number)!
 
@@ -153,6 +155,37 @@ export async function getRandomRecipes(number = 6) {
     return result
   } catch (e) {
     randomPromiseCache.delete(number)
+    throw e
+  }
+}
+
+export async function getRecipesByCuisine(cuisine: string, number = 6) {
+  const key = `${cuisine}:${number}`
+
+  if (categoryCache.has(key)) return categoryCache.get(key)!
+
+  if (categoryPromiseCache.has(key)) return categoryPromiseCache.get(key)!
+
+  const promise = (async () => {
+    const res = await client.get('/recipes/complexSearch', {
+      params: {
+        number,
+        cuisine,
+        addRecipeInformation: true,
+      },
+    })
+    const recipes = res.data?.results ?? []
+    categoryCache.set(key, recipes)
+    return recipes
+  })()
+
+  categoryPromiseCache.set(key, promise)
+  try {
+    const result = await promise
+    categoryPromiseCache.delete(key)
+    return result
+  } catch (e) {
+    categoryPromiseCache.delete(key)
     throw e
   }
 }

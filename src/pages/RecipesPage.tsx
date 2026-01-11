@@ -28,7 +28,7 @@ const RecipesPage: React.FC = () => {
     const q = decodeURIComponent(query);
     setLoading(true);
     setError(null);
-    searchRecipes(q, 12, locale)
+    searchRecipes(q, 6, locale)
       .then(data => {
         setRecipes(data.results || []);
       })
