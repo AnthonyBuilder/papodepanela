@@ -48,7 +48,19 @@ function App() {
         }
         const spoonacularLanguage = languageMap[locale] || 'en'
         
-        const recipes = await getRandomRecipes(9, spoonacularLanguage)
+        let recipes = await getRandomRecipes(9, spoonacularLanguage)
+        
+        // Traduzir títulos e descrições se não estiver em inglês
+        if (locale !== 'en') {
+          recipes = await Promise.all(
+            recipes.map(async (r: any) => ({
+              ...r,
+              title: r.title ? await translateForLocale(r.title, locale as 'pt' | 'en' | 'es') : '',
+              summary: r.summary ? await translateForLocale(stripHtml(r.summary).slice(0, 120), locale as 'pt' | 'en' | 'es') : '',
+            }))
+          )
+        }
+        
         const mapped = recipes.map((r: any) => ({
           title: r.title || '',
           description: stripHtml(r.summary || '').slice(0, 120),
@@ -100,7 +112,19 @@ function App() {
         const sections = await Promise.all(
           categories.map(async (cuisine) => {
             try {
-              const recipes = await getRecipesByCuisine(cuisine, 4, spoonacularLanguage)
+              let recipes = await getRecipesByCuisine(cuisine, 4, spoonacularLanguage)
+              
+              // Traduzir títulos e descrições se não estiver em inglês
+              if (locale !== 'en') {
+                recipes = await Promise.all(
+                  recipes.map(async (r: any) => ({
+                    ...r,
+                    title: r.title ? await translateForLocale(r.title, locale as 'pt' | 'en' | 'es') : '',
+                    summary: r.summary ? await translateForLocale(stripHtml(r.summary).slice(0, 120), locale as 'pt' | 'en' | 'es') : '',
+                  }))
+                )
+              }
+              
               const mapped = recipes.map((r: any) => ({
                 title: r.title || '',
                 description: stripHtml(r.summary || '').slice(0, 120),
