@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getRecipeInformation } from '../api/spoonacular'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import { Button } from '@/components/ui/button'
-import { useLanguage } from '@/context/LanguageContext'
+import { useLanguage, translateForLocale } from '@/context/LanguageContext'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
 
@@ -24,7 +24,71 @@ export default function RecipePage() {
       setLoading(true)
       setError(null)
       try {
-        const data = await getRecipeInformation(Number(id))
+        let data = await getRecipeInformation(Number(id))
+        
+        // Traduzir conteúdo se não estiver em inglês
+        if (locale !== 'en') {
+          data = { ...data }
+          
+          // Traduzir título
+          if (data.title) {
+            data.title = await translateForLocale(data.title, locale as 'pt' | 'en' | 'es')
+          }
+          
+          // Traduzir summary
+          if (data.summary) {
+            const plainSummary = data.summary.replace(/<[^>]*>/g, '')
+            const translated = await translateForLocale(plainSummary, locale as 'pt' | 'en' | 'es')
+            data.summary = `<p>${translated}</p>`
+          }
+          
+          // Traduzir ingredientes
+          if (data.extendedIngredients && Array.isArray(data.extendedIngredients)) {
+            data.extendedIngredients = await Promise.all(
+              data.extendedIngredients.map(async (ing: any) => ({
+                ...ing,
+                original: await translateForLocale(ing.original, locale as 'pt' | 'en' | 'es')
+              }))
+            )
+          }
+          
+          // Traduzir cuisines
+          if (data.cuisines && Array.isArray(data.cuisines)) {
+            data.cuisines = await Promise.all(
+              data.cuisines.map((c: string) => translateForLocale(c, locale as 'pt' | 'en' | 'es'))
+            )
+          }
+          
+          // Traduzir diets
+          if (data.diets && Array.isArray(data.diets)) {
+            data.diets = await Promise.all(
+              data.diets.map((d: string) => translateForLocale(d, locale as 'pt' | 'en' | 'es'))
+            )
+          }
+          
+          // Traduzir instruções
+          if (data.analyzedInstructions && Array.isArray(data.analyzedInstructions)) {
+            data.analyzedInstructions = await Promise.all(
+              data.analyzedInstructions.map(async (instr: any) => ({
+                ...instr,
+                steps: instr.steps ? await Promise.all(
+                  instr.steps.map((step: any) => 
+                    translateForLocale(step.step, locale as 'pt' | 'en' | 'es').then(
+                      translated => ({ ...step, step: translated })
+                    )
+                  )
+                ) : instr.steps
+              }))
+            )
+          }
+          
+          // Traduzir plain instructions
+          if (data.instructions) {
+            const plainInstructions = data.instructions.replace(/<[^>]*>/g, '')
+            data.instructions = await translateForLocale(plainInstructions, locale as 'pt' | 'en' | 'es')
+          }
+        }
+        
         setRecipe(data)
       } catch (e) {
         console.error('getRecipeInformation failed', e)
@@ -34,7 +98,7 @@ export default function RecipePage() {
       }
     }
     load()
-  }, [id, t])
+  }, [id, locale, t])
 
   if (!id) return <div className="p-6">{t('invalidId')}</div>
   if (loading) return <SpinnerEmpty />
