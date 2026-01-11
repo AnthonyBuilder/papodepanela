@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/context/LanguageContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
+import SEO from '@/components/SEO'
 import { searchRecipes } from '../api/spoonacular';
 
 const RecipesPage: React.FC = () => {
@@ -41,22 +42,28 @@ const RecipesPage: React.FC = () => {
   if (error) return <div className="p-6">{error}</div>;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">
-          {t('results')} "{decodeURIComponent(query)}"
-        </h2>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => navigate('/')}>{t('back')}</Button>
+    <>
+      <SEO 
+        title={`${t('results')} "${decodeURIComponent(query)}" - Papo de Panela`}
+        description={`Encontre receitas deliciosas para "${decodeURIComponent(query)}". Descubra novas opções e inspire-se!`}
+        canonicalUrl={`https://papodepanela.vercel.app/recipes/${query}`}
+      />
+      <div className="max-w-4xl mx-auto px-4 py-10">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">
+            {t('results')} "{decodeURIComponent(query)}"
+          </h2>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => navigate('/')}>{t('back')}</Button>
+          </div>
         </div>
-      </div>
 
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {recipes.length === 0 && (
-          <li className="p-4 rounded text-center text-gray-700">{t('noRecipesFound')}</li>
-        )}
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {recipes.length === 0 && (
+            <li className="p-4 rounded text-center text-gray-700">{t('noRecipesFound')}</li>
+          )}
 
-        {recipes.map(r => (
+          {recipes.map(r => (
           <li key={r.id} className="bg-card p-4 rounded-lg shadow-sm">
             <div className="flex gap-4 items-start">
               {r.image && (
@@ -77,6 +84,7 @@ const RecipesPage: React.FC = () => {
         ))}
       </ul>
     </div>
+    </>
   );
 };
 

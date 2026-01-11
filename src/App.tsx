@@ -3,6 +3,7 @@ import './index.css'
 import Header from './components/Header'
 import Card from './components/Card'
 import FeaturedSlider from './components/FeaturedSlider'
+import SEO from './components/SEO'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import RecipesPage from './pages/RecipesPage'
 import LoginPage from './pages/LoginPage'
@@ -150,6 +151,7 @@ function App() {
 
   return (
     <Router>
+      <SEO />
       <Header onSelect={(o) => setSelected(o)} />
       <div className="pt-20">
         <Routes>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getRecipeInformation } from '../api/spoonacular'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
+import SEO from '@/components/SEO'
 import { Button } from '@/components/ui/button'
 import { useLanguage, translateForLocale } from '@/context/LanguageContext'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
@@ -105,6 +106,9 @@ export default function RecipePage() {
   if (error) return <div className="p-6 text-red-600">{error}</div>
   if (!recipe) return null
 
+  const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '')
+  const description = recipe.summary ? stripHtml(recipe.summary).slice(0, 160) : 'Receita deliciosa do Papo de Panela'
+
   const handleToggleSave = async () => {
     if (!user) {
       navigate('/login')
@@ -135,10 +139,18 @@ export default function RecipePage() {
   const isRecipeSaved = isSaved(recipe.id)
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10 text-gray-500">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-800 font-noto-serif">{recipe.title}</h1>
-        <div className="flex items-center gap-2">
+    <>
+      <SEO 
+        title={`${recipe.title} - Papo de Panela`}
+        description={description}
+        keywords={`${recipe.title}, receita, ${recipe.cuisines?.join(', ')}, ${recipe.diets?.join(', ')}`}
+        ogImage={recipe.image}
+        canonicalUrl={`https://papodepanela.vercel.app/recipe/${recipe.id}`}
+      />
+      <div className="max-w-4xl mx-auto px-4 py-10 text-gray-500">
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-gray-800 font-noto-serif">{recipe.title}</h1>
+          <div className="flex items-center gap-2">
           {user && (
             <Button
               variant={isRecipeSaved ? "default" : "outline"}
@@ -222,5 +234,6 @@ export default function RecipePage() {
         )}
       </div>
     </div>
+    </>
   )
 }

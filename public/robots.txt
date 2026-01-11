@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://papodepanela.vercel.app/sitemap.xml

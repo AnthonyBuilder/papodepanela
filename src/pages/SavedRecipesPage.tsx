@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
-import { useLanguage } from '@/context/LanguageContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import { Button } from '@/components/ui/button'
 
@@ -9,7 +8,6 @@ export default function SavedRecipesPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { savedRecipes, loading, removeRecipe } = useSavedRecipes()
-  const { t } = useLanguage()
 
   if (!user) {
     return (
