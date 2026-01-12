@@ -13,7 +13,7 @@ import CommunityRecipesPage from './pages/CommunityRecipesPage'
 import CommunityRecipeDetailPage from './pages/CommunityRecipeDetailPage'
 import CreateRecipePage from './pages/CreateRecipePage'
 import AIRecipePage from './pages/AIRecipePage'
-import { getRandomRecipes, getRecipesByCuisine, getDrinkRecipes } from './api/spoonacular'
+import { getRandomRecipes, getRecipesByCuisine, getDrinkRecipes, getDessertRecipes } from './api/spoonacular'
 import { useLanguage, translateForLocale } from './context/LanguageContext'
 import { useAuth } from './context/AuthContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
@@ -32,7 +32,10 @@ function HomePage({ selected }: { selected: string | null }) {
   const [categorySections, setCategorySections] = useState<Array<{ label: string; items: Array<{ title: string; description: string; image: string; id: string }> }>>([])
   const [categoryLoading, setCategoryLoading] = useState(false)
   const [drinkRecipes, setDrinkRecipes] = useState<Array<{ title: string; description: string; image: string; id: string }>>([]);
-  const [drinkLoading, setDrinkLoading] = useState(false)
+  const [drinkLoading, setDrinkLoading] = useState(false);
+  const [dessertRecipes, setDessertRecipes] = useState<Array<{ title: string; description: string; image: string; id: string }>>([])
+  const [dessertLoading, setDessertLoading] = useState(false)
+  
   // Set document language for browser translation
   useEffect(() => {
     const langMap: Record<string, string> = {
@@ -97,6 +100,7 @@ function HomePage({ selected }: { selected: string | null }) {
         italian: { pt: 'Italiano', en: 'Italian', es: 'Italiano' },
         mexican: { pt: 'Mexicano', en: 'Mexican', es: 'Mexicano' },
         vegetarian: { pt: 'Vegetariano', en: 'Vegetarian', es: 'Vegetariano' },
+        asian: { pt: 'Asiático', en: 'Asian', es: 'Asiático' },
       }
       const entry = map[key]
       if (!entry) return key
@@ -105,7 +109,7 @@ function HomePage({ selected }: { selected: string | null }) {
       return entry.en
     }
 
-    const categories = ['italian', 'mexican', 'vegetarian']
+    const categories = ['italian', 'mexican', 'vegetarian', 'asian']
 
     const loadCategories = async () => {
       setCategoryLoading(true)
@@ -198,6 +202,49 @@ function HomePage({ selected }: { selected: string | null }) {
     }
 
     loadDrinks()
+  }, [locale])
+
+  useEffect(() => {
+    const stripHtml = (html = '') => html.replace(/<[^>]*>/g, '')
+
+    const loadDesserts = async () => {
+      setDessertLoading(true)
+      try {
+        const languageMap: Record<string, string> = {
+          pt: 'pt',
+          en: 'en',
+          es: 'es',
+        }
+        const spoonacularLanguage = languageMap[locale] || 'en'
+        
+        let recipes = await getDessertRecipes(6, spoonacularLanguage)
+        
+        if (locale !== 'en') {
+          recipes = await Promise.all(
+            recipes.map(async (r: any) => ({
+              ...r,
+              title: r.title ? await translateForLocale(r.title, locale as 'pt' | 'en' | 'es') : '',
+              summary: r.summary ? await translateForLocale(stripHtml(r.summary).slice(0, 120), locale as 'pt' | 'en' | 'es') : '',
+            }))
+          )
+        }
+        
+        const mapped = recipes.map((r: any) => ({
+          title: r.title || '',
+          description: stripHtml(r.summary || '').slice(0, 120),
+          image: r.image || '',
+          id: r.id || '',
+        }))
+        
+        setDessertRecipes(mapped)
+      } catch (e) {
+        console.error('Failed to load dessert recipes', e)
+      } finally {
+        setDessertLoading(false)
+      }
+    }
+
+    loadDesserts()
   }, [locale])
 
   return (
@@ -296,6 +343,32 @@ function HomePage({ selected }: { selected: string | null }) {
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                           {drinkRecipes.map((it) => (
                             <Card key={`drink-${it.id}`} title={it.title} description={it.description} image={it.image} query={it.id} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Seção Sobremesas */}
+                    <div className="mt-12">
+                      <div className="flex items-center justify-between mb-2">
+                        <h2 className="text-2xl font-bold font-noto-serif flex items-center gap-2">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+                          </svg>
+                          {locale === 'pt' ? 'Sobremesas' : locale === 'es' ? 'Postres' : 'Desserts'}
+                        </h2>
+                      </div>
+                      <p className="text-sm text-gray-500 mb-6">
+                        {locale === 'pt' ? 'Doces e sobremesas irresistíveis' : locale === 'es' ? 'Dulces y postres irresistibles' : 'Irresistible sweets and desserts'}
+                      </p>
+                      {dessertLoading ? (
+                        <SpinnerEmpty />
+                      ) : dessertRecipes.length === 0 ? (
+                        <p className="text-sm text-gray-500">{t('noRecipesFound') || 'Nenhuma receita encontrada.'}</p>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                          {dessertRecipes.map((it) => (
+                            <Card key={`dessert-${it.id}`} title={it.title} description={it.description} image={it.image} query={it.id} />
                           ))}
                         </div>
                       )}
