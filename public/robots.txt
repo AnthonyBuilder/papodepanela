@@ -1,4 +1,18 @@
+# Papo de Panela - Robots.txt
 User-agent: *
 Allow: /
 
+# Desallow admin pages
+Disallow: /admin
+Disallow: /api/
+
+# Allow search engines to crawl recipe pages
+Allow: /recipes/
+Allow: /recipe/
+Allow: /community/
+
+# Sitemap location
 Sitemap: https://papodepanela.site/sitemap.xml
+
+# Crawl delay (optional, helps with server load)
+Crawl-delay: 1
