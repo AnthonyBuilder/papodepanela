@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '@/context/LanguageContext'
+import { useAuth } from '@/context/AuthContext'
 import { getCommunityRecipes, type CommunityRecipe } from '@/lib/firebase'
 import { Button } from '@/components/ui/button'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
@@ -8,6 +9,7 @@ import SEO from '@/components/SEO'
 
 export default function CommunityRecipesPage() {
   const { t } = useLanguage()
+  const { user } = useAuth()
   const navigate = useNavigate()
   const [recipes, setRecipes] = useState<CommunityRecipe[]>([])
   const [loading, setLoading] = useState(true)
@@ -48,7 +50,7 @@ export default function CommunityRecipesPage() {
             <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('community.title')}</h1>
             <p className="text-gray-600">{t('community.subtitle')}</p>
           </div>
-          <Button onClick={() => navigate('/create-recipe')}>
+          <Button onClick={() => user ? navigate('/create-recipe') : navigate('/login')}>
             {t('community.createRecipe')}
           </Button>
         </div>
@@ -56,7 +58,7 @@ export default function CommunityRecipesPage() {
         {recipes.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600 mb-4">{t('community.noRecipes')}</p>
-            <Button onClick={() => navigate('/create-recipe')}>
+            <Button onClick={() => user ? navigate('/create-recipe') : navigate('/login')}>
               {t('community.createFirst')}
             </Button>
           </div>

@@ -10,7 +10,7 @@ type HeaderProps = {
 }
 
 const Header: React.FC<HeaderProps> = ({ onSelect }) => {
-  const options = ['Receitas', 'Categorias', 'Sobre']
+  const options = ['Receitas', 'Comunidade', 'Categorias', 'Sobre']
   const [query, setQuery] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
   const [showSearch, setShowSearch] = useState(false)
@@ -27,8 +27,12 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
   const { t } = useLanguage()
 
   const handleOptionClick = (o: string) => {
-    onSelect?.(o)
-    if (o === 'Receitas') navigate('/')
+    if (o === 'Comunidade') {
+      navigate('/community')
+    } else {
+      navigate('/')
+      onSelect?.(o)
+    }
     setMenuOpen(false)
   }
 
@@ -38,7 +42,10 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
         <div className="flex items-center gap-4">
           <button
             type="button"
-            onClick={() => navigate('/')}
+            onClick={() => {
+              navigate('/')
+              onSelect?.('Receitas')
+            }}
             className="flex items-center gap-2"
           >
             <div className="md:hidden font-noto-serif w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow-md">
@@ -87,15 +94,6 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
                   <Heart className="w-4 h-4" />
                   Salvas
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-1" 
-                  onClick={() => navigate('/community')}
-                >
-                  <Users className="w-4 h-4" />
-                  Comunidade
-                </Button>
                 <span className="text-sm text-gray-600">{auth.currentUser.displayName}</span>
                 <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-1" onClick={() => auth.signOut().then(() => navigate('/'))}>
                   <LogOut className="w-4 h-4" />
@@ -122,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
 
       {showSearch && (
         <div className="px-4 pb-3 flex justify-center">
-          <div className="flex gap-2 w-full sm:max-w-md items-center">
+          <div className="flex gap-2 w-full sm:max-w-md">
             <input
               autoFocus
               aria-label="Pesquisar"
@@ -132,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') submitSearch() }}
             />
-            <Button variant="ghost" size="sm" onClick={submitSearch} className="h-auto">
+            <Button  variant="ghost" size="sm" onClick={submitSearch}>
               <ArrowRight className="w-4 h-4" />
             </Button>
           </div>
@@ -174,15 +172,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
                   <Heart className="w-4 h-4 mr-2" />
                   Salvas
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="justify-start bg-white/90 text-gray-700" 
-                  onClick={() => { navigate('/community'); setMenuOpen(false) }}
-                >
-                  <Users className="w-4 h-4 mr-2" />
-                  Comunidade
-                </Button>
+        
                 <Button
                   variant="ghost"
                   size="sm"

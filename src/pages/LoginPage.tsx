@@ -47,8 +47,15 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h1 className="font-noto-serif p-5 mb-2 text-4xl font-bold text-orange-500">Papo de Panela</h1>
-      <p className="text-gray-500 mb-10 text-center">
+      {/* Logo */}
+      <div className="mb-6 flex flex-col items-center">
+        <div className="font-noto-serif w-20 h-20 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-4xl shadow-lg mb-4">
+          P
+        </div>
+        <h1 className="font-noto-serif text-4xl font-bold text-gray-800">Papo de Panela</h1>
+      </div>
+      
+      <p className="text-gray-500 mb-10 text-center max-w-md">
         {isSignup ? 'Crie uma conta para começar' : 'Bem-vindo de volta! Por favor, entre com suas credenciais.'}
       </p>
       <div className="w-full max-w-md bg-gray-100 rounded-xl shadow p-6">

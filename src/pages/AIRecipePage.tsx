@@ -60,6 +60,11 @@ export default function AIRecipePage() {
     setError('')
   }
 
+  if (!user) {
+    navigate('/login')
+    return null
+  }
+
   return (
     <>
       <SEO 
