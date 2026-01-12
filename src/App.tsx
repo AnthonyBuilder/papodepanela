@@ -48,6 +48,16 @@ function HomePage({ selected }: { selected: string | null }) {
 
   useEffect(() => {
     const stripHtml = (html = '') => html.replace(/<[^>]*>/g, '')
+    
+    // Função para obter URL de imagem em alta qualidade
+    const getHighQualityImage = (imageUrl: string) => {
+      if (!imageUrl) return imageUrl
+      // Substitui qualquer tamanho existente por 636x393 (maior qualidade disponível)
+      return imageUrl
+        .replace(/312x231/g, '636x393')
+        .replace(/556x370/g, '636x393')
+        .replace(/90x90/g, '636x393')
+    }
 
     const loadRandom = async () => {
       setLoading(true)
@@ -76,7 +86,7 @@ function HomePage({ selected }: { selected: string | null }) {
         const mapped = recipes.map((r: any) => ({
           title: r.title || '',
           description: stripHtml(r.summary || '').slice(0, 120),
-          image: r.image || '',
+          image: getHighQualityImage(r.image || ''),
           id: r.id || '',
         }))
         
