@@ -120,14 +120,14 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ recipes }) => {
       {/* Navigation Buttons - Desktop Only - Outside slider */}
       <button
         onClick={goToPrevious}
-        className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/50 backdrop-blur-md hover:bg-orange-500 hover:text-white rounded-full items-center justify-center shadow-lg transition-all border border-gray-200"
+        className="text-xs hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/50 backdrop-blur-md hover:bg-orange-500 hover:text-white rounded-full items-center justify-center shadow-lg transition-all border border-gray-200"
         aria-label="Anterior"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
       <button
         onClick={goToNext}
-        className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/50 backdrop-blur-md hover:bg-orange-500 hover:text-white rounded-full items-center justify-center shadow-lg transition-all border border-gray-200"
+        className="text-xs hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/50 backdrop-blur-md hover:bg-orange-500 hover:text-white rounded-full items-center justify-center shadow-lg transition-all border border-gray-200"
         aria-label="Próximo"
       >
         <ChevronRight className="w-6 h-6" />
