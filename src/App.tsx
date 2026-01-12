@@ -166,6 +166,21 @@ function HomePage({ selected }: { selected: string | null }) {
                       <FeaturedSlider recipes={featuredRecipes} />
                     )}
 
+                    {/* Título Principal */}
+                    <div className="text-center my-12">
+                      <div className="inline-flex items-center justify-center gap-3 mb-4">
+                        <div className="font-noto-serif w-16 h-16 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-3xl shadow-lg">
+                          P
+                        </div>
+                      </div>
+                      <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3 font-noto-serif">
+                        Papo de Panela
+                      </h1>
+                      <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                        {t('home.subtitle') || 'Descubra, crie e compartilhe receitas deliciosas de todo o mundo'}
+                      </p>
+                    </div>
+
                     {/* Seção Call-to-Action: Criar Receita */}
                     <div className="my-8 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-2xl p-8 border border-orange-100 shadow-sm">
                       <div className="flex flex-col md:flex-row items-center justify-between gap-6">

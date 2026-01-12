@@ -39,9 +39,11 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="font-noto-serif text-3xl text-orange-500"
+            className="flex items-center gap-2 font-noto-serif text-3xl text-orange-500"
           >
-            Papo de Panela
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+              P
+            </div>
           </button>
 
           <nav className="hidden md:flex gap-2">
