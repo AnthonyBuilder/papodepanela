@@ -145,7 +145,7 @@ export default function RecipePage() {
         description={description}
         keywords={`${recipe.title}, receita, ${recipe.cuisines?.join(', ')}, ${recipe.diets?.join(', ')}`}
         ogImage={recipe.image}
-        canonicalUrl={`https://papodepanela.vercel.app/recipe/${recipe.id}`}
+        canonicalUrl={`https://papodepanela.site/recipe/${recipe.id}`}
       />
       <div className="max-w-4xl mx-auto px-4 py-10 text-gray-500">
         <div className="mb-6 flex items-center justify-between">

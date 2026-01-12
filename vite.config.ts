@@ -13,7 +13,7 @@ export default defineConfig({
       client: env.VITE_ADSENSE_CLIENT || 'ca-pub-6045768913014450',
     }),
     sitemap({
-      hostname: 'https://papodepanela.vercel.app',
+      hostname: 'https://papodepanela.site',
       dynamicRoutes: [
         '/',
         '/recipes',

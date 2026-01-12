@@ -46,7 +46,7 @@ const RecipesPage: React.FC = () => {
       <SEO 
         title={`${t('results')} "${decodeURIComponent(query)}" - Papo de Panela`}
         description={`Encontre receitas deliciosas para "${decodeURIComponent(query)}". Descubra novas opções e inspire-se!`}
-        canonicalUrl={`https://papodepanela.vercel.app/recipes/${query}`}
+        canonicalUrl={`https://papodepanela.site/recipes/${query}`}
       />
       <div className="max-w-4xl mx-auto px-4 py-10">
         <div className="mb-6 flex items-center justify-between">

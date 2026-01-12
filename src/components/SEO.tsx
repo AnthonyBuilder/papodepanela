@@ -13,7 +13,7 @@ export default function SEO({
   description = 'Descubra receitas deliciosas de todo o mundo. Salve suas favoritas e cozinhe como um chef profissional!',
   keywords = 'receitas, culinária, gastronomia, cozinha, pratos, comida, papodepanela',
   ogImage,
-  canonicalUrl = 'https://papodepanela.vercel.app/',
+  canonicalUrl = 'https://papodepanela.site/',
 }: SEOProps) {
   useEffect(() => {
     // Update title
