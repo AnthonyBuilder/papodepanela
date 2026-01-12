@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { useLanguage, translateForLocale } from '@/context/LanguageContext'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
+import AdBanner from '@/components/AdBanner'
 
 export default function RecipePage() {
   const { id } = useParams<{ id: string }>()
@@ -232,6 +233,7 @@ export default function RecipePage() {
         )}
       </div>
     </div>
+    <AdBanner />
     </>
   )
 }
