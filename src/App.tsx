@@ -12,7 +12,7 @@ import SavedRecipesPage from './pages/SavedRecipesPage'
 import CommunityRecipesPage from './pages/CommunityRecipesPage'
 import CommunityRecipeDetailPage from './pages/CommunityRecipeDetailPage'
 import CreateRecipePage from './pages/CreateRecipePage'
-import { getRandomRecipes, getRecipesByCuisine } from './api/spoonacular'
+import { getRandomRecipes, getRecipesByCuisine, getDrinkRecipes } from './api/spoonacular'
 import { useLanguage, translateForLocale } from './context/LanguageContext'
 import { useAuth } from './context/AuthContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
@@ -30,7 +30,8 @@ function HomePage({ selected }: { selected: string | null }) {
   const [featuredRecipes, setFeaturedRecipes] = useState<Array<{ title: string; description: string; image: string; id: string }>>([])
   const [categorySections, setCategorySections] = useState<Array<{ label: string; items: Array<{ title: string; description: string; image: string; id: string }> }>>([])
   const [categoryLoading, setCategoryLoading] = useState(false)
-
+  const [drinkRecipes, setDrinkRecipes] = useState<Array<{ title: string; description: string; image: string; id: string }>>([]);
+  const [drinkLoading, setDrinkLoading] = useState(false)
   // Set document language for browser translation
   useEffect(() => {
     const langMap: Record<string, string> = {
@@ -155,6 +156,49 @@ function HomePage({ selected }: { selected: string | null }) {
     loadCategories()
   }, [locale])
 
+  useEffect(() => {
+    const stripHtml = (html = '') => html.replace(/<[^>]*>/g, '')
+
+    const loadDrinks = async () => {
+      setDrinkLoading(true)
+      try {
+        const languageMap: Record<string, string> = {
+          pt: 'pt',
+          en: 'en',
+          es: 'es',
+        }
+        const spoonacularLanguage = languageMap[locale] || 'en'
+        
+        let recipes = await getDrinkRecipes(6, spoonacularLanguage)
+        
+        if (locale !== 'en') {
+          recipes = await Promise.all(
+            recipes.map(async (r: any) => ({
+              ...r,
+              title: r.title ? await translateForLocale(r.title, locale as 'pt' | 'en' | 'es') : '',
+              summary: r.summary ? await translateForLocale(stripHtml(r.summary).slice(0, 120), locale as 'pt' | 'en' | 'es') : '',
+            }))
+          )
+        }
+        
+        const mapped = recipes.map((r: any) => ({
+          title: r.title || '',
+          description: stripHtml(r.summary || '').slice(0, 120),
+          image: r.image || '',
+          id: r.id || '',
+        }))
+        
+        setDrinkRecipes(mapped)
+      } catch (e) {
+        console.error('Failed to load drink recipes', e)
+      } finally {
+        setDrinkLoading(false)
+      }
+    }
+
+    loadDrinks()
+  }, [locale])
+
   return (
     <div className="min-h-screen bg-white text-black">
       <main className="max-w-6xl mx-auto px-4 py-10">
@@ -226,6 +270,29 @@ function HomePage({ selected }: { selected: string | null }) {
                         ))}
                       </section>
                     )}
+
+                    {/* Seção Bebidas */}
+                    <div className="mt-12">
+                      <div className="flex items-center justify-between mb-2">
+                        <h2 className="text-2xl font-bold font-noto-serif">
+                          {locale === 'pt' ? '🍹 Bebidas' : locale === 'es' ? '🍹 Bebidas' : '🍹 Drinks'}
+                        </h2>
+                      </div>
+                      <p className="text-sm text-gray-500 mb-6">
+                        {locale === 'pt' ? 'Descubra receitas deliciosas de bebidas' : locale === 'es' ? 'Descubre deliciosas recetas de bebidas' : 'Discover delicious drink recipes'}
+                      </p>
+                      {drinkLoading ? (
+                        <SpinnerEmpty />
+                      ) : drinkRecipes.length === 0 ? (
+                        <p className="text-sm text-gray-500">{t('noRecipesFound') || 'Nenhuma receita encontrada.'}</p>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                          {drinkRecipes.map((it) => (
+                            <Card key={`drink-${it.id}`} title={it.title} description={it.description} image={it.image} query={it.id} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </>
                 )}
 

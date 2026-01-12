@@ -43,16 +43,6 @@ export default function RecipePage() {
             data.summary = `<p>${translated}</p>`
           }
           
-          // Traduzir ingredientes
-          if (data.extendedIngredients && Array.isArray(data.extendedIngredients)) {
-            data.extendedIngredients = await Promise.all(
-              data.extendedIngredients.map(async (ing: any) => ({
-                ...ing,
-                original: await translateForLocale(ing.original, locale as 'pt' | 'en' | 'es')
-              }))
-            )
-          }
-          
           // Traduzir cuisines
           if (data.cuisines && Array.isArray(data.cuisines)) {
             data.cuisines = await Promise.all(

@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
   }
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-white/70 backdrop-blur-sm text-black border-b border-solid border-gray-100 z-50">
+    <header className="fixed top-0 left-0 w-full bg-white/70 backdrop-blur-sm text-black border-b border-solid border-black/20 z-50 box-shadow-md shadow box-border-bottom">
       <div className="max-w-6xl mx-auto px-2 py-2 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button
