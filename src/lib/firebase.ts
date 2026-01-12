@@ -10,6 +10,9 @@ import {
   query,
   orderBy,
   onSnapshot,
+  where,
+  addDoc,
+  serverTimestamp,
   type Unsubscribe
 } from 'firebase/firestore'
 
@@ -114,4 +117,118 @@ export function subscribeSavedRecipes(
   )
 }
 
-export default app
+// ============================================
+// Community Recipes Functions
+// ============================================
+
+export interface CommunityRecipe {
+  id?: string
+  title: string
+  description: string
+  ingredients: string[]
+  instructions: string[]
+  image?: string
+  prepTime: number
+  servings: number
+  category?: string
+  cuisine?: string
+  authorId: string
+  authorName: string
+  createdAt: any
+  likes?: number
+  likedBy?: string[]
+}
+
+/**
+ * Cria uma nova receita da comunidade
+ */
+export async function createCommunityRecipe(recipe: Omit<CommunityRecipe, 'id' | 'createdAt' | 'likes' | 'likedBy'>): Promise<string> {
+  const user = auth.currentUser
+  if (!user) throw new Error('Usuário não autenticado')
+  
+  const recipeData = {
+    ...recipe,
+    authorId: user.uid,
+    authorName: user.displayName || user.email || 'Anônimo',
+    createdAt: serverTimestamp(),
+    likes: 0,
+    likedBy: []
+  }
+  
+  const docRef = await addDoc(collection(db, 'communityRecipes'), recipeData)
+  return docRef.id
+}
+
+/**
+ * Busca todas as receitas da comunidade
+ */
+export async function getCommunityRecipes(): Promise<CommunityRecipe[]> {
+  const col = collection(db, 'communityRecipes')
+  const q = query(col, orderBy('createdAt', 'desc'))
+  const snap = await getDocs(q)
+  
+  return snap.docs.map(d => ({ id: d.id, ...d.data() } as CommunityRecipe))
+}
+
+/**
+ * Busca receitas criadas por um usuário específico
+ */
+export async function getUserRecipes(userId: string): Promise<CommunityRecipe[]> {
+  const col = collection(db, 'communityRecipes')
+  const q = query(col, where('authorId', '==', userId), orderBy('createdAt', 'desc'))
+  const snap = await getDocs(q)
+  
+  return snap.docs.map(d => ({ id: d.id, ...d.data() } as CommunityRecipe))
+}
+
+/**
+ * Inscreve-se para atualizações em tempo real das receitas da comunidade
+ */
+export function subscribeCommunityRecipes(
+  callback: (recipes: CommunityRecipe[]) => void,
+  onError?: (error: Error) => void
+): Unsubscribe {
+  const col = collection(db, 'communityRecipes')
+  const q = query(col, orderBy('createdAt', 'desc'))
+  
+  return onSnapshot(
+    q,
+    (snap) => {
+      const recipes = snap.docs.map(d => ({ id: d.id, ...d.data() } as CommunityRecipe))
+      callback(recipes)
+    },
+    onError
+  )
+}
+
+/**
+ * Curtir/descurtir uma receita
+ */
+export async function toggleLikeRecipe(recipeId: string): Promise<void> {
+  const user = auth.currentUser
+  if (!user) throw new Error('Usuário não autenticado')
+  
+  const recipeRef = doc(db, 'communityRecipes', recipeId)
+  const recipeSnap = await getDocs(query(collection(db, 'communityRecipes'), where('__name__', '==', recipeId)))
+  
+  if (recipeSnap.empty) throw new Error('Receita não encontrada')
+  
+  const recipeData = recipeSnap.docs[0].data() as CommunityRecipe
+  const likedBy = recipeData.likedBy || []
+  const hasLiked = likedBy.includes(user.uid)
+  
+  if (hasLiked) {
+    // Remove like
+    await setDoc(recipeRef, {
+      likes: (recipeData.likes || 0) - 1,
+      likedBy: likedBy.filter(id => id !== user.uid)
+    }, { merge: true })
+  } else {
+    // Add like
+    await setDoc(recipeRef, {
+      likes: (recipeData.likes || 0) + 1,
+      likedBy: [...likedBy, user.uid]
+    }, { merge: true })
+  }
+}
+

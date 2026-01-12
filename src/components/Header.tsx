@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/context/LanguageContext'
 import { auth } from '@/lib/firebase'
-import { LogOut, Heart, Menu, X, Search, ArrowRight } from 'lucide-react'
+import { LogOut, Heart, Menu, X, Search, ArrowRight, Users } from 'lucide-react'
 
 type HeaderProps = {
   onSelect?: (opt: string) => void
@@ -86,6 +86,15 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
                   <Heart className="w-4 h-4" />
                   Salvas
                 </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-1" 
+                  onClick={() => navigate('/community')}
+                >
+                  <Users className="w-4 h-4" />
+                  Comunidade
+                </Button>
                 <span className="text-sm text-gray-600">{auth.currentUser.displayName}</span>
                 <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-1" onClick={() => auth.signOut().then(() => navigate('/'))}>
                   <LogOut className="w-4 h-4" />
@@ -153,6 +162,15 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
                 >
                   <Heart className="w-4 h-4 mr-2" />
                   Salvas
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="justify-start bg-white/90 text-gray-700" 
+                  onClick={() => { navigate('/community'); setMenuOpen(false) }}
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Comunidade
                 </Button>
                 <Button
                   variant="ghost"

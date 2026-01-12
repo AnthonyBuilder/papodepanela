@@ -4,20 +4,26 @@ import Header from './components/Header'
 import Card from './components/Card'
 import FeaturedSlider from './components/FeaturedSlider'
 import SEO from './components/SEO'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import RecipesPage from './pages/RecipesPage'
 import LoginPage from './pages/LoginPage'
 import RecipePage from './pages/RecipePage'
 import SavedRecipesPage from './pages/SavedRecipesPage'
+import CommunityRecipesPage from './pages/CommunityRecipesPage'
+import CommunityRecipeDetailPage from './pages/CommunityRecipeDetailPage'
+import CreateRecipePage from './pages/CreateRecipePage'
 import { getRandomRecipes, getRecipesByCuisine } from './api/spoonacular'
 import { useLanguage, translateForLocale } from './context/LanguageContext'
+import { useAuth } from './context/AuthContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import Footer from '@/components/Footer'
+import { Button } from '@/components/ui/button'
 import { Analytics } from "@vercel/analytics/next"
 
-function App() {
-  const [selected, setSelected] = useState<string | null>(null)
+function HomePage({ selected }: { selected: string | null }) {
   const { locale, t } = useLanguage()
+  const { user } = useAuth()
+  const navigate = useNavigate()
 
   const [items, setItems] = useState<Array<{ title: string; description: string; image: string; id: string }>>([])
   const [loading, setLoading] = useState(false)
@@ -150,16 +156,8 @@ function App() {
   }, [locale])
 
   return (
-    <Router>
-      <SEO />
-      <Header onSelect={(o) => setSelected(o)} />
-      <div className="pt-20">
-        <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="min-h-screen bg-white text-black">
-              <main className="max-w-6xl mx-auto px-4 py-10">
+    <div className="min-h-screen bg-white text-black">
+      <main className="max-w-6xl mx-auto px-4 py-10">
                 {/* Seção Receitas (padrão) */}
                 {(!selected || selected === 'Receitas') && (
                   <>
@@ -167,6 +165,35 @@ function App() {
                     {featuredRecipes.length > 0 && (
                       <FeaturedSlider recipes={featuredRecipes} />
                     )}
+
+                    {/* Seção Call-to-Action: Criar Receita */}
+                    <div className="my-8 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-2xl p-8 border border-orange-100 shadow-sm">
+                      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="flex-1">
+                          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                            {t('createRecipe.callToActionTitle') || '👨‍🍳 Compartilhe suas receitas!'}
+                          </h2>
+                          <p className="text-gray-600">
+                            {t('createRecipe.callToActionDesc') || 'Tem uma receita especial? Compartilhe com a comunidade e inspire outros cozinheiros!'}
+                          </p>
+                        </div>
+                        <div className="flex gap-3">
+                          <Button 
+                            onClick={() => navigate('/community')}
+                            variant="outline"
+                            className="whitespace-nowrap"
+                          >
+                            {t('community.browseRecipes') || 'Ver Receitas'}
+                          </Button>
+                          <Button 
+                            onClick={() => user ? navigate('/create-recipe') : navigate('/login')}
+                            className="bg-orange-500 hover:bg-orange-600 whitespace-nowrap"
+                          >
+                            {t('createRecipe.createButton')}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
 
                     <div className="flex items-center justify-between mb-2">
                       <h1 className="text-3xl font-bold font-noto-serif">{t('randomRecipes')}</h1>
@@ -250,12 +277,26 @@ function App() {
                 )}
               </main>
             </div>
-          }
-        />
+  )
+}
+
+function App() {
+  const [selected, setSelected] = useState<string | null>(null)
+
+  return (
+    <Router>
+      <SEO />
+      <Header onSelect={(o) => setSelected(o)} />
+      <div className="pt-20">
+        <Routes>
+        <Route path="/" element={<HomePage selected={selected} />} />
         <Route path="/recipes/:query" element={<RecipesPage />} />
         <Route path="/recipe/:id" element={<RecipePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/saved" element={<SavedRecipesPage />} />
+        <Route path="/community" element={<CommunityRecipesPage />} />
+        <Route path="/community/:id" element={<CommunityRecipeDetailPage />} />
+        <Route path="/create-recipe" element={<CreateRecipePage />} />
         </Routes>
       </div>
       <Footer />
