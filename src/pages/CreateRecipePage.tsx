@@ -154,7 +154,7 @@ export default function CreateRecipePage() {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
               placeholder={t('createRecipe.titlePlaceholder')}
               required
             />
@@ -169,7 +169,7 @@ export default function CreateRecipePage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
               placeholder={t('createRecipe.descriptionPlaceholder')}
               required
             />
@@ -186,7 +186,7 @@ export default function CreateRecipePage() {
                 value={prepTime}
                 onChange={(e) => setPrepTime(e.target.value)}
                 min="1"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 required
               />
             </div>
@@ -201,7 +201,7 @@ export default function CreateRecipePage() {
                 value={servings}
                 onChange={(e) => setServings(e.target.value)}
                 min="1"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 required
               />
             </div>
@@ -217,7 +217,7 @@ export default function CreateRecipePage() {
                 id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 placeholder={t('createRecipe.categoryPlaceholder')}
               />
             </div>
@@ -231,7 +231,7 @@ export default function CreateRecipePage() {
                 id="cuisine"
                 value={cuisine}
                 onChange={(e) => setCuisine(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 placeholder={t('createRecipe.cuisinePlaceholder')}
               />
             </div>
@@ -246,7 +246,7 @@ export default function CreateRecipePage() {
               id="image"
               value={image}
               onChange={(e) => setImage(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
               placeholder="https://..."
             />
           </div>
@@ -260,7 +260,7 @@ export default function CreateRecipePage() {
               value={ingredients}
               onChange={(e) => setIngredients(e.target.value)}
               rows={8}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent font-mono text-sm"
+              className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg font-mono text-sm"
               placeholder={t('createRecipe.ingredientsPlaceholder')}
               required
             />
@@ -275,7 +275,7 @@ export default function CreateRecipePage() {
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
               rows={10}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent font-mono text-sm"
+              className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg font-mono text-sm"
               placeholder={t('createRecipe.instructionsPlaceholder')}
               required
             />

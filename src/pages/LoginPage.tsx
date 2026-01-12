@@ -71,7 +71,7 @@ export default function LoginPage() {
                 type="text"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full border px-3 py-2 rounded-xl bg-white text-black"
+                className="w-full border border-gray-300 px-3 py-2 rounded-xl bg-white/90 text-black transition-all duration-200 hover:shadow-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
                 placeholder="Seu nome"
               />
             </div>
@@ -83,7 +83,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border px-3 py-2 rounded-xl bg-white text-black"
+              className="w-full border border-gray-300 px-3 py-2 rounded-xl bg-white/90 text-black transition-all duration-200 hover:shadow-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
               placeholder="seu@exemplo.com"
             />
           </div>
@@ -94,7 +94,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border px-3 py-2 rounded-xl bg-white text-black"
+              className="w-full border border-gray-300 px-3 py-2 rounded-xl bg-white/90 text-black transition-all duration-200 hover:shadow-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
               placeholder="Senha"
             />
           </div>

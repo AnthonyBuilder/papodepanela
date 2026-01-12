@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
               autoFocus
               aria-label="Pesquisar"
               placeholder={t('searchPlaceholder')}
-              className="px-3 py-2 rounded-xl bg-white w-full text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="px-3 py-2 rounded-xl bg-white/95 w-full text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-all duration-200 hover:shadow-md focus:shadow-lg"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') submitSearch() }}

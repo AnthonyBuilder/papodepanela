@@ -100,7 +100,7 @@ export default function AIRecipePage() {
                   value={ingredients}
                   onChange={(e) => setIngredients(e.target.value)}
                   rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                   placeholder={t('aiRecipe.ingredientsPlaceholder') || 'Ex: frango, tomate, cebola, alho (separados por vírgula)'}
                   required
                 />
@@ -116,7 +116,7 @@ export default function AIRecipePage() {
                     id="cuisine"
                     value={cuisine}
                     onChange={(e) => setCuisine(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                     placeholder={t('aiRecipe.cuisinePlaceholder') || 'Ex: Italiana, Mexicana, Brasileira'}
                   />
                 </div>
@@ -130,7 +130,7 @@ export default function AIRecipePage() {
                     id="mealType"
                     value={mealType}
                     onChange={(e) => setMealType(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                     placeholder={t('aiRecipe.mealTypePlaceholder') || 'Ex: Café da manhã, Almoço, Jantar'}
                   />
                 </div>
@@ -146,7 +146,7 @@ export default function AIRecipePage() {
                     id="dietaryRestrictions"
                     value={dietaryRestrictions}
                     onChange={(e) => setDietaryRestrictions(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                     placeholder={t('aiRecipe.dietaryPlaceholder') || 'Ex: Vegetariano, Sem glúten, Vegano'}
                   />
                 </div>
@@ -162,7 +162,7 @@ export default function AIRecipePage() {
                     onChange={(e) => setServings(e.target.value)}
                     min="1"
                     max="20"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-white/90 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-200 hover:shadow-md focus:shadow-lg"
                   />
                 </div>
               </div>

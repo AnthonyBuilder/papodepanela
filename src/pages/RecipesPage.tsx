@@ -85,7 +85,7 @@ const RecipesPage: React.FC = () => {
 
         {/* Filtros */}
         {showFilters && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="mb-6 p-4 bg-white/95 rounded-lg border border-gray-200 shadow-md transition-all duration-300 animate-in fade-in slide-in-from-top-2">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-gray-800">Filtros de Pesquisa</h3>
               {hasActiveFilters && (
@@ -110,7 +110,7 @@ const RecipesPage: React.FC = () => {
                 <select
                   value={filters.diet || ''}
                   onChange={(e) => handleFilterChange('diet', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full px-3 py-2 bg-white/90 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-orange-400 transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 >
                   <option value="">Todas</option>
                   <option value="vegetarian">Vegetariana</option>
@@ -129,7 +129,7 @@ const RecipesPage: React.FC = () => {
                 <select
                   value={filters.type || ''}
                   onChange={(e) => handleFilterChange('type', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full px-3 py-2 bg-white/90 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-orange-400 transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 >
                   <option value="">Todos</option>
                   <option value="main course">Prato Principal</option>
@@ -153,7 +153,7 @@ const RecipesPage: React.FC = () => {
                 <select
                   value={filters.cuisine || ''}
                   onChange={(e) => handleFilterChange('cuisine', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full px-3 py-2 bg-white/90 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-orange-400 transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 >
                   <option value="">Todas</option>
                   <option value="italian">Italiana</option>
@@ -179,7 +179,7 @@ const RecipesPage: React.FC = () => {
                 <select
                   value={filters.maxReadyTime || ''}
                   onChange={(e) => handleFilterChange('maxReadyTime', e.target.value ? parseInt(e.target.value) : '')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full px-3 py-2 bg-white/90 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-orange-400 transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 >
                   <option value="">Qualquer tempo</option>
                   <option value="15">15 minutos</option>
@@ -198,7 +198,7 @@ const RecipesPage: React.FC = () => {
                 <select
                   value={filters.intolerances || ''}
                   onChange={(e) => handleFilterChange('intolerances', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full px-3 py-2 bg-white/90 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-orange-400 transition-all duration-200 hover:shadow-md focus:shadow-lg"
                 >
                   <option value="">Nenhuma</option>
                   <option value="dairy">Laticínios</option>
