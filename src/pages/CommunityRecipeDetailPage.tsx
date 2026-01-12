@@ -96,7 +96,10 @@ export default function CommunityRecipeDetailPage() {
               disabled={likingRecipe}
               className="flex items-center gap-2"
             >
-              {hasLiked ? '❤️' : '🤍'} {recipe.likes || 0}
+              <svg className={`w-4 h-4 ${hasLiked ? 'fill-current' : ''}`} fill={hasLiked ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              {recipe.likes || 0}
             </Button>
           )}
         </div>
@@ -109,15 +112,39 @@ export default function CommunityRecipeDetailPage() {
           />
         )}
 
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-3">{recipe.title}</h1>
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <h1 className="font-noto-serif text-3xl font-bold text-gray-800 mb-3">{recipe.title}</h1>
           <p className="text-gray-600 mb-4">{recipe.description}</p>
           
           <div className="flex items-center gap-6 text-sm text-gray-600 mb-4 pb-4 border-b">
-            <span>⏱️ {recipe.prepTime} {t('minutes')}</span>
-            <span>🍽️ {recipe.servings} {t('servings')}</span>
-            {recipe.category && <span>📂 {recipe.category}</span>}
-            {recipe.cuisine && <span>🌍 {recipe.cuisine}</span>}
+            <span className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {recipe.prepTime} {t('minutes')}
+            </span>
+            <span className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              {recipe.servings} {t('servings')}
+            </span>
+            {recipe.category && (
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                </svg>
+                {recipe.category}
+              </span>
+            )}
+            {recipe.cuisine && (
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {recipe.cuisine}
+              </span>
+            )}
           </div>
 
           <div className="text-sm text-gray-600">
@@ -128,7 +155,7 @@ export default function CommunityRecipeDetailPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white rounded-lg p-6 mb-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('ingredients')}</h2>
           <ul className="space-y-2">
             {recipe.ingredients.map((ingredient, index) => (
@@ -140,7 +167,7 @@ export default function CommunityRecipeDetailPage() {
           </ul>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('instructions')}</h2>
           <ol className="space-y-4">
             {recipe.instructions.map((instruction, index) => (

@@ -229,8 +229,11 @@ function HomePage({ selected }: { selected: string | null }) {
                     <div className="my-8 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-2xl p-8 border border-orange-100 shadow-sm">
                       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="flex-1">
-                          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                            {t('createRecipe.callToActionTitle') || '👨‍🍳 Compartilhe suas receitas!'}
+                          <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            {t('createRecipe.callToActionTitle')?.replace(/👨‍🍳/g, '').trim() || 'Compartilhe suas receitas!'}
                           </h2>
                           <p className="text-gray-600">
                             {t('createRecipe.callToActionDesc') || 'Tem uma receita especial? Compartilhe com a comunidade e inspire outros cozinheiros!'}
@@ -274,8 +277,11 @@ function HomePage({ selected }: { selected: string | null }) {
                     {/* Seção Bebidas */}
                     <div className="mt-12">
                       <div className="flex items-center justify-between mb-2">
-                        <h2 className="text-2xl font-bold font-noto-serif">
-                          {locale === 'pt' ? '🍹 Bebidas' : locale === 'es' ? '🍹 Bebidas' : '🍹 Drinks'}
+                        <h2 className="text-2xl font-bold font-noto-serif flex items-center gap-2">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          {locale === 'pt' ? 'Bebidas' : locale === 'es' ? 'Bebidas' : 'Drinks'}
                         </h2>
                       </div>
                       <p className="text-sm text-gray-500 mb-6">
@@ -343,12 +349,37 @@ function HomePage({ selected }: { selected: string | null }) {
                         Conectar pessoas através da comida, fornecendo acesso a milhares de receitas traduzidas e adaptadas para o seu idioma.
                       </p>
                       <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3">Recursos</h3>
-                      <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                        <li>🔍 Busca inteligente de receitas</li>
-                        <li>🌍 Tradução automática para múltiplos idiomas</li>
-                        <li>❤️ Salve suas receitas favoritas</li>
-                        <li>🏷️ Explore por categorias culinárias</li>
-                        <li>📱 Interface responsiva para todos os dispositivos</li>
+                      <ul className="list-none pl-0 space-y-2 text-gray-700">
+                        <li className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                          Busca inteligente de receitas
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Tradução automática para múltiplos idiomas
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-orange-500 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                          </svg>
+                          Salve suas receitas favoritas
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                          </svg>
+                          Explore por categorias culinárias
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                          </svg>
+                          Interface responsiva para todos os dispositivos
+                        </li>
                       </ul>
                       <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3">Contato</h3>
                       <p className="text-gray-700">

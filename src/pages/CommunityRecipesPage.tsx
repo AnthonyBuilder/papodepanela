@@ -87,7 +87,7 @@ function RecipeCard({ recipe }: { recipe: CommunityRecipe }) {
         />
       )}
       <div className="p-4">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
+        <h3 className="font-noto-serif text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
           {recipe.title}
         </h3>
         <p className="text-gray-600 text-sm mb-3 line-clamp-2">
@@ -96,8 +96,18 @@ function RecipeCard({ recipe }: { recipe: CommunityRecipe }) {
         
         <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
           <div className="flex items-center gap-4">
-            <span>⏱️ {recipe.prepTime} {t('minutes')}</span>
-            <span>🍽️ {recipe.servings}</span>
+            <span className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {recipe.prepTime} {t('minutes')}
+            </span>
+            <span className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              {recipe.servings}
+            </span>
           </div>
         </div>
 
@@ -106,7 +116,12 @@ function RecipeCard({ recipe }: { recipe: CommunityRecipe }) {
             {t('community.by')} <span className="font-medium">{recipe.authorName}</span>
           </span>
           {recipe.likes !== undefined && recipe.likes > 0 && (
-            <span className="text-red-500">❤️ {recipe.likes}</span>
+            <span className="text-red-500 flex items-center gap-1">
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+              {recipe.likes}
+            </span>
           )}
         </div>
       </div>

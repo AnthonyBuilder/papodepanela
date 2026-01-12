@@ -10,9 +10,19 @@ service cloud.firestore {
       
       // Regras para as receitas salvas de cada usuário
       match /savedRecipes/{recipeId} {
-        // Permite que o usuário leia e escreva apenas suas próprias receitas salvas
+        // Permite que o usuário leia e escreve apenas suas próprias receitas salvas
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
+    }
+    
+    // Regras para receitas da comunidade
+    match /communityRecipes/{recipeId} {
+      // Qualquer um pode ler receitas da comunidade
+      allow read: if true;
+      // Apenas usuários autenticados podem criar receitas
+      allow create: if request.auth != null;
+      // Apenas o autor pode atualizar ou deletar sua receita
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.authorId;
     }
     
     // Bloqueia acesso a todas as outras coleções por padrão

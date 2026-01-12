@@ -42,19 +42,23 @@ export default function CreateRecipePage() {
       const ingredientsList = ingredients.split('\n').filter(i => i.trim())
       const instructionsList = instructions.split('\n').filter(i => i.trim())
       
-      await createCommunityRecipe({
+      const recipeData: any = {
         title,
         description,
         ingredients: ingredientsList,
         instructions: instructionsList,
-        image: image || undefined,
         prepTime: parseInt(prepTime),
         servings: parseInt(servings),
-        category: category || undefined,
-        cuisine: cuisine || undefined,
         authorId: user.uid,
         authorName: user.displayName || user.email || 'Anônimo',
-      })
+      }
+      
+      // Adicionar campos opcionais apenas se tiverem valor
+      if (image) recipeData.image = image
+      if (category) recipeData.category = category
+      if (cuisine) recipeData.cuisine = cuisine
+      
+      await createCommunityRecipe(recipeData)
       
       navigate('/community')
     } catch (err) {
