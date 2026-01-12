@@ -12,6 +12,7 @@ import SavedRecipesPage from './pages/SavedRecipesPage'
 import CommunityRecipesPage from './pages/CommunityRecipesPage'
 import CommunityRecipeDetailPage from './pages/CommunityRecipeDetailPage'
 import CreateRecipePage from './pages/CreateRecipePage'
+import AIRecipePage from './pages/AIRecipePage'
 import { getRandomRecipes, getRecipesByCuisine, getDrinkRecipes } from './api/spoonacular'
 import { useLanguage, translateForLocale } from './context/LanguageContext'
 import { useAuth } from './context/AuthContext'
@@ -410,6 +411,7 @@ function App() {
         <Route path="/community" element={<CommunityRecipesPage />} />
         <Route path="/community/:id" element={<CommunityRecipeDetailPage />} />
         <Route path="/create-recipe" element={<CreateRecipePage />} />
+        <Route path="/ai-recipe" element={<AIRecipePage />} />
         </Routes>
       </div>
       <Footer />

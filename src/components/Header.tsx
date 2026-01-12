@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/context/LanguageContext'
 import { auth } from '@/lib/firebase'
-import { LogOut, Heart, Menu, X, Search, ArrowRight, Users } from 'lucide-react'
+import { LogOut, Heart, Menu, X, Search, ArrowRight, Users, Sparkles } from 'lucide-react'
 
 type HeaderProps = {
   onSelect?: (opt: string) => void
@@ -85,6 +85,15 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-md rounded-xl flex items-center gap-1 hover:from-purple-600 hover:to-pink-600" 
+                  onClick={() => navigate('/ai-recipe')}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  IA
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
                   className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-1" 
                   onClick={() => navigate('/saved')}
                 >
@@ -159,6 +168,15 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
           <div className="flex flex-col gap-2">
             {auth.currentUser ? (
               <>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="justify-start bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600" 
+                  onClick={() => { navigate('/ai-recipe'); setMenuOpen(false) }}
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Gerar com IA
+                </Button>
                 <Button 
                   variant="ghost" 
                   size="sm" 
