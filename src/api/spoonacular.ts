@@ -127,7 +127,7 @@ export async function getRecipeInformation(id: number, language = 'en') {
   return res.data
 }
 
-export async function getRandomRecipes(number = 4, language = 'en') {
+export async function getRandomRecipes(number = 6, language = 'en') {
   // in-memory cache
   const cacheKey = `random:${number}:${language}`
   if (randomCache.has(number)) return randomCache.get(number)!

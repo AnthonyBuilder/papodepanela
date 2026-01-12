@@ -56,7 +56,7 @@ function HomePage({ selected }: { selected: string | null }) {
         }
         const spoonacularLanguage = languageMap[locale] || 'en'
         
-        let recipes = await getRandomRecipes(9, spoonacularLanguage)
+        let recipes = await getRandomRecipes(6, spoonacularLanguage)
         
         // Traduzir títulos e descrições se não estiver em inglês
         if (locale !== 'en') {
