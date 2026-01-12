@@ -47,7 +47,7 @@ export default function CommunityRecipesPage() {
       <div className="max-w-6xl mx-auto px-4 py-10">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('community.title')}</h1>
+            <h1 className="font-noto-serif text-3xl font-bold text-gray-800 mb-2">{t('community.title')}</h1>
             <p className="text-gray-600">{t('community.subtitle')}</p>
           </div>
           <Button onClick={() => user ? navigate('/create-recipe') : navigate('/login')}>
