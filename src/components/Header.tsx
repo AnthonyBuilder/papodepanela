@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
   return (
     <header className="fixed top-0 left-0 w-full bg-white/70 backdrop-blur-sm text-black border-b border-solid border-black/20 z-50 box-shadow-md shadow box-border-bottom">
       <div className="max-w-6xl mx-auto px-2 py-2 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <button
             type="button"
             onClick={() => navigate('/')}
@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
             <div className="md:hidden font-noto-serif w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow-md">
               P
             </div>
-            <span className="font-noto-serif font-bold text-2xl text-gray-800 hidden md:inline-block">
+            <span className="font-noto-serif font-bold text-2xl text-gray-800 hidden md:inline-block whitespace-nowrap">
               Papo de Panela
             </span>
           </button>
@@ -63,22 +63,9 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
         </div>
 
         <div className="hidden sm:flex items-center gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <input
-                aria-label="Pesquisar"
-                placeholder={t('searchPlaceholder')}
-                className="px-3 py-1 rounded-xl bg-white w-52 opacity-80 text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') submitSearch() }}
-              />
-              <Button variant="ghost" size="sm" onClick={submitSearch}>
-                <Search className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-
+          <Button variant="ghost" size="icon" onClick={() => setShowSearch((v) => !v)}>
+            <Search className="w-5 h-5" />
+          </Button>
           <div className="flex items-center gap-2">
             {auth.currentUser ? (
               <>
@@ -134,9 +121,10 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
       </div>
 
       {showSearch && (
-        <div className="sm:hidden px-4 pb-3">
-          <div className="flex gap-2">
+        <div className="px-4 pb-3 flex justify-center">
+          <div className="flex gap-2 w-full sm:max-w-md items-center">
             <input
+              autoFocus
               aria-label="Pesquisar"
               placeholder={t('searchPlaceholder')}
               className="px-3 py-2 rounded-xl bg-white w-full text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
@@ -144,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') submitSearch() }}
             />
-            <Button  variant="ghost" size="sm" onClick={submitSearch}>
+            <Button variant="ghost" size="sm" onClick={submitSearch} className="h-auto">
               <ArrowRight className="w-4 h-4" />
             </Button>
           </div>

@@ -411,6 +411,7 @@ function App() {
         <Route path="/community" element={<CommunityRecipesPage />} />
         <Route path="/community/:id" element={<CommunityRecipeDetailPage />} />
         <Route path="/create-recipe" element={<CreateRecipePage />} />
+        <Route path="/edit-recipe/:id" element={<CreateRecipePage />} />
         <Route path="/ai-recipe" element={<AIRecipePage />} />
         </Routes>
       </div>

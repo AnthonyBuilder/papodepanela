@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useLanguage } from '@/context/LanguageContext'
 import { useAuth } from '@/context/AuthContext'
-import { collection, doc, getDoc } from 'firebase/firestore'
-import { db, toggleLikeRecipe, type CommunityRecipe } from '@/lib/firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import { db, toggleLikeRecipe, deleteCommunityRecipe, type CommunityRecipe } from '@/lib/firebase'
 import { Button } from '@/components/ui/button'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import SEO from '@/components/SEO'
@@ -17,6 +17,7 @@ export default function CommunityRecipeDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [likingRecipe, setLikingRecipe] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     const loadRecipe = async () => {
@@ -65,6 +66,25 @@ export default function CommunityRecipeDetailPage() {
     }
   }
 
+  const handleDelete = async () => {
+    if (!recipe?.id || !user) return
+    
+    if (!window.confirm(t('community.confirmDelete') || 'Tem certeza que deseja deletar esta receita?')) {
+      return
+    }
+    
+    setDeleting(true)
+    try {
+      await deleteCommunityRecipe(recipe.id)
+      navigate('/community')
+    } catch (err) {
+      console.error('Error deleting recipe:', err)
+      alert(t('community.deleteError') || 'Erro ao deletar receita')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   if (loading) return <SpinnerEmpty />
   
   if (error) return (
@@ -76,6 +96,7 @@ export default function CommunityRecipeDetailPage() {
   if (!recipe) return null
 
   const hasLiked = user && recipe.likedBy?.includes(user.uid)
+  const isAuthor = user && recipe.authorId === user.uid
 
   return (
     <>
@@ -89,19 +110,46 @@ export default function CommunityRecipeDetailPage() {
           <Button variant="outline" onClick={() => navigate('/community')}>
             ← {t('back')}
           </Button>
-          {user && (
-            <Button
-              variant={hasLiked ? "default" : "outline"}
-              onClick={handleToggleLike}
-              disabled={likingRecipe}
-              className="flex items-center gap-2"
-            >
-              <svg className={`w-4 h-4 ${hasLiked ? 'fill-current' : ''}`} fill={hasLiked ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              {recipe.likes || 0}
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {isAuthor && (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(`/edit-recipe/${recipe.id}`)}
+                  className="flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  {t('edit')}
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  {deleting ? (t('deleting') || 'Deletando...') : (t('delete') || 'Deletar')}
+                </Button>
+              </>
+            )}
+            {user && (
+              <Button
+                variant={hasLiked ? "default" : "outline"}
+                onClick={handleToggleLike}
+                disabled={likingRecipe}
+                className="flex items-center gap-2"
+              >
+                <svg className={`w-4 h-4 ${hasLiked ? 'fill-current' : ''}`} fill={hasLiked ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                {recipe.likes || 0}
+              </Button>
+            )}
+          </div>
         </div>
 
         {recipe.image && (

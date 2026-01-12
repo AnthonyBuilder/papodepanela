@@ -1,15 +1,20 @@
-import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, type FormEvent } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { useLanguage } from '@/context/LanguageContext'
-import { createCommunityRecipe } from '@/lib/firebase'
+import { createCommunityRecipe, updateCommunityRecipe, type CommunityRecipe } from '@/lib/firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 import { Button } from '@/components/ui/button'
 import SEO from '@/components/SEO'
+import SpinnerEmpty from '@/components/SpinnerEmpty'
 
 export default function CreateRecipePage() {
+  const { id: recipeId } = useParams<{ id: string }>()
   const { user } = useAuth()
   const { t } = useLanguage()
   const navigate = useNavigate()
+  const isEditMode = !!recipeId
   
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -21,11 +26,56 @@ export default function CreateRecipePage() {
   const [category, setCategory] = useState('')
   const [cuisine, setCuisine] = useState('')
   const [loading, setLoading] = useState(false)
+  const [loadingRecipe, setLoadingRecipe] = useState(isEditMode)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (isEditMode && recipeId) {
+      const loadRecipe = async () => {
+        try {
+          const docRef = doc(db, 'communityRecipes', recipeId)
+          const docSnap = await getDoc(docRef)
+          
+          if (docSnap.exists()) {
+            const recipe = docSnap.data() as CommunityRecipe
+            
+            // Verificar se o usuário é o autor
+            if (recipe.authorId !== user?.uid) {
+              setError(t('createRecipe.notAuthor') || 'Você não tem permissão para editar esta receita')
+              setLoadingRecipe(false)
+              return
+            }
+            
+            setTitle(recipe.title)
+            setDescription(recipe.description)
+            setIngredients(recipe.ingredients.join('\n'))
+            setInstructions(recipe.instructions.join('\n'))
+            setImage(recipe.image || '')
+            setPrepTime(String(recipe.prepTime))
+            setServings(String(recipe.servings))
+            setCategory(recipe.category || '')
+            setCuisine(recipe.cuisine || '')
+          } else {
+            setError(t('community.recipeNotFound') || 'Receita não encontrada')
+          }
+        } catch (err) {
+          console.error('Error loading recipe:', err)
+          setError(t('loadError') || 'Erro ao carregar receita')
+        } finally {
+          setLoadingRecipe(false)
+        }
+      }
+      loadRecipe()
+    }
+  }, [isEditMode, recipeId, user?.uid, t])
 
   if (!user) {
     navigate('/login')
     return null
+  }
+
+  if (loadingRecipe) {
+    return <SpinnerEmpty />
   }
 
   const handleSubmit = async (e: FormEvent) => {
@@ -49,8 +99,11 @@ export default function CreateRecipePage() {
         instructions: instructionsList,
         prepTime: parseInt(prepTime),
         servings: parseInt(servings),
-        authorId: user.uid,
-        authorName: user.displayName || user.email || 'Anônimo',
+      }
+      
+      if (!isEditMode) {
+        recipeData.authorId = user!.uid
+        recipeData.authorName = user!.displayName || user!.email || 'Anônimo'
       }
       
       // Adicionar campos opcionais apenas se tiverem valor
@@ -58,12 +111,16 @@ export default function CreateRecipePage() {
       if (category) recipeData.category = category
       if (cuisine) recipeData.cuisine = cuisine
       
-      await createCommunityRecipe(recipeData)
-      
-      navigate('/community')
+      if (isEditMode && recipeId) {
+        await updateCommunityRecipe(recipeId, recipeData)
+        navigate(`/community/${recipeId}`)
+      } else {
+        await createCommunityRecipe(recipeData)
+        navigate('/community')
+      }
     } catch (err) {
-      console.error('Error creating recipe:', err)
-      setError(t('createRecipe.error'))
+      console.error('Error saving recipe:', err)
+      setError(isEditMode ? (t('createRecipe.updateError') || 'Erro ao atualizar receita') : t('createRecipe.error'))
     } finally {
       setLoading(false)
     }
@@ -72,13 +129,13 @@ export default function CreateRecipePage() {
   return (
     <>
       <SEO 
-        title={`${t('createRecipe.title')} | Papo de Panela`}
-        description={t('createRecipe.description')}
+        title={`${isEditMode ? (t('editRecipe.title') || 'Editar Receita') : t('createRecipe.title')} | Papo de Panela`}
+        description={isEditMode ? (t('editRecipe.description') || 'Edite sua receita') : t('createRecipe.description')}
       />
       <div className="max-w-3xl mx-auto px-4 py-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('createRecipe.title')}</h1>
-          <p className="text-gray-600">{t('createRecipe.subtitle')}</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">{isEditMode ? (t('editRecipe.title') || 'Editar Receita') : t('createRecipe.title')}</h1>
+          <p className="text-gray-600">{isEditMode ? (t('editRecipe.subtitle') || 'Atualize os dados da sua receita') : t('createRecipe.subtitle')}</p>
         </div>
 
         {error && (
@@ -226,9 +283,9 @@ export default function CreateRecipePage() {
 
           <div className="flex gap-4">
             <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? t('createRecipe.creating') : t('createRecipe.createButton')}
+              {loading ? (isEditMode ? (t('editRecipe.updating') || 'Atualizando...') : t('createRecipe.creating')) : (isEditMode ? (t('editRecipe.updateButton') || 'Atualizar Receita') : t('createRecipe.createButton'))}
             </Button>
-            <Button type="button" variant="outline" onClick={() => navigate('/community')}>
+            <Button type="button" variant="outline" onClick={() => navigate(isEditMode ? `/community/${recipeId}` : '/community')}>
               {t('cancel')}
             </Button>
           </div>

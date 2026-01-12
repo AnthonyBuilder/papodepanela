@@ -160,6 +160,27 @@ export async function createCommunityRecipe(recipe: Omit<CommunityRecipe, 'id' |
 }
 
 /**
+ * Atualiza uma receita da comunidade existente
+ */
+export async function updateCommunityRecipe(recipeId: string, recipe: Partial<Omit<CommunityRecipe, 'id' | 'createdAt' | 'authorId' | 'authorName' | 'likes' | 'likedBy'>>): Promise<void> {
+  const user = auth.currentUser
+  if (!user) throw new Error('Usuário não autenticado')
+  
+  const recipeRef = doc(db, 'communityRecipes', recipeId)
+  await setDoc(recipeRef, recipe, { merge: true })
+}
+
+/**
+ * Deleta uma receita da comunidade
+ */
+export async function deleteCommunityRecipe(recipeId: string): Promise<void> {
+  const user = auth.currentUser
+  if (!user) throw new Error('Usuário não autenticado')
+  
+  await deleteDoc(doc(db, 'communityRecipes', recipeId))
+}
+
+/**
  * Busca todas as receitas da comunidade
  */
 export async function getCommunityRecipes(): Promise<CommunityRecipe[]> {
