@@ -33,17 +33,20 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
   }
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-sm text-black border-b border-solid border-gray-100 z-50">
+    <header className="fixed top-0 left-0 w-full bg-white/70 backdrop-blur-sm text-black border-b border-solid border-gray-100 z-50">
       <div className="max-w-6xl mx-auto px-2 py-2 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 font-noto-serif text-3xl text-orange-500"
+            className="flex items-center gap-2"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+            <div className="md:hidden font-noto-serif w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow-md">
               P
             </div>
+            <span className="font-noto-serif font-bold text-2xl text-gray-800 hidden md:inline-block">
+              Papo de Panela
+            </span>
           </button>
 
           <nav className="hidden md:flex gap-2">
