@@ -37,7 +37,15 @@ function localStorageSet(key: string, value: any) {
   }
 }
 
-export async function searchRecipes(query: string, number = 8, uiLocale = 'pt') {
+export interface SearchFilters {
+  diet?: string
+  type?: string
+  cuisine?: string
+  maxReadyTime?: number
+  intolerances?: string
+}
+
+export async function searchRecipes(query: string, number = 8, uiLocale = 'pt', filters?: SearchFilters) {
   const originalQuery = query
   let enQuery = originalQuery
   let translationFailed = false
@@ -55,7 +63,8 @@ export async function searchRecipes(query: string, number = 8, uiLocale = 'pt') 
 
   const enQueryEncoded = encodeURIComponent(enQuery)
   console.log('[searchRecipes] enQueryEncoded=', enQueryEncoded)
-  const cacheKey = `search:${enQueryEncoded}:${uiLocale}:${number}`
+  const filterKey = filters ? JSON.stringify(filters) : ''
+  const cacheKey = `search:${enQueryEncoded}:${uiLocale}:${number}:${filterKey}`
 
   // try local memory cache
   if (searchCache.has(cacheKey)) {
@@ -73,9 +82,14 @@ export async function searchRecipes(query: string, number = 8, uiLocale = 'pt') 
   if (searchPromiseCache.has(cacheKey)) return searchPromiseCache.get(cacheKey)!
 
   const promise = (async () => {
-    const res = await client.get('/recipes/complexSearch', {
-      params: { query: enQueryEncoded, number },
-    })
+    const params: any = { query: enQueryEncoded, number }
+    if (filters?.diet) params.diet = filters.diet
+    if (filters?.type) params.type = filters.type
+    if (filters?.cuisine) params.cuisine = filters.cuisine
+    if (filters?.maxReadyTime) params.maxReadyTime = filters.maxReadyTime
+    if (filters?.intolerances) params.intolerances = filters.intolerances
+    
+    const res = await client.get('/recipes/complexSearch', { params })
     const data = res.data
 
     if (data && Array.isArray(data.results) && data.results.length > 0) {
