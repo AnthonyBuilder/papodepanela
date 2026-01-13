@@ -116,6 +116,11 @@ const translations: Record<Locale, Record<string, string>> = {
     'aiRecipe.generateAnother': 'Generate Another Recipe',
     'backToHome': 'Back to Home',
     'tips': 'Tips',
+    savedRecipes: 'Saved Recipes',
+    home: 'Home',
+    search: 'Search',
+    desserts: 'Desserts',
+    mainCourses: 'Main Courses',
   },
   pt: {
     login: 'Entrar',
@@ -221,6 +226,11 @@ const translations: Record<Locale, Record<string, string>> = {
     'aiRecipe.generateAnother': 'Gerar Outra Receita',
     'backToHome': 'Voltar ao Início',
     'tips': 'Dicas',
+    savedRecipes: 'Receitas Salvas',
+    home: 'Início',
+    search: 'Pesquisa',
+    desserts: 'Sobremesas',
+    mainCourses: 'Pratos Principais',
   },
   es: {
     login: 'Iniciar sesión',
@@ -326,6 +336,11 @@ const translations: Record<Locale, Record<string, string>> = {
     'aiRecipe.generateAnother': 'Generar Otra Receta',
     'backToHome': 'Volver al Inicio',
     'tips': 'Consejos',
+    savedRecipes: 'Recetas Guardadas',
+    home: 'Inicio',
+    search: 'Buscar',
+    desserts: 'Postres',
+    mainCourses: 'Platos Principales',
   },
 }
 

@@ -1,14 +1,31 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { Button } from '@/components/ui/button'
+import { Search, X, Filter, Trash2 } from 'lucide-react'
 
 export default function SavedRecipesPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { savedRecipes, loading, removeRecipe } = useSavedRecipes()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedDiet, setSelectedDiet] = useState<string>('')
+  const [showFilters, setShowFilters] = useState(false)
+
+  // Filtrar receitas
+  const filteredRecipes = savedRecipes.filter((recipe) => {
+    const matchesSearch = recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesDiet = !selectedDiet || recipe.diets?.includes(selectedDiet)
+    return matchesSearch && matchesDiet
+  })
+
+  // Obter todas as dietas únicas
+  const allDiets = Array.from(
+    new Set(savedRecipes.flatMap((recipe) => recipe.diets || []))
+  ).sort()
 
   if (!user) {
     return (
@@ -35,18 +52,99 @@ export default function SavedRecipesPage() {
         <p className="text-gray-600">
           {savedRecipes.length === 0
             ? 'Você ainda não salvou nenhuma receita'
-            : `${savedRecipes.length} receita${savedRecipes.length > 1 ? 's' : ''} salva${savedRecipes.length > 1 ? 's' : ''}`}
+            : `${filteredRecipes.length} de ${savedRecipes.length} receita${savedRecipes.length > 1 ? 's' : ''}`}
         </p>
       </div>
+
+      {savedRecipes.length > 0 && (
+        <div className="mb-6 space-y-4">
+          {/* Barra de Pesquisa */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Pesquisar receitas salvas..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white text-gray-800 placeholder:text-gray-400 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-all"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+            <Button
+              variant="outline"
+              size="default"
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center justify-center gap-2 px-4 h-[42px] whitespace-nowrap rounded-xl"
+            >
+              <Filter className="w-4 h-4" />
+              Filtros
+            </Button>
+          </div>
+
+          {/* Filtros Expandidos */}
+          {showFilters && allDiets.length > 0 && (
+            <div className="bg-white/95 rounded-lg border border-gray-200 p-4 shadow-sm">
+              <h3 className="font-semibold text-gray-800 mb-3 flex items-center justify-between">
+                Tipo de Dieta
+                {selectedDiet && (
+                  <button
+                    onClick={() => setSelectedDiet('')}
+                    className="text-sm text-orange-600 hover:text-orange-700 flex items-center gap-1"
+                  >
+                    <X className="w-4 h-4" />
+                    Limpar
+                  </button>
+                )}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {allDiets.map((diet) => (
+                  <button
+                    key={diet}
+                    onClick={() => setSelectedDiet(selectedDiet === diet ? '' : diet)}
+                    className={`px-3 py-1.5 rounded-full text-sm transition-all ${
+                      selectedDiet === diet
+                        ? 'bg-green-500 text-white'
+                        : 'bg-green-100 text-green-800 hover:bg-green-200'
+                    }`}
+                  >
+                    {diet}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {savedRecipes.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 mb-4">Explore receitas e salve suas favoritas!</p>
           <Button onClick={() => navigate('/recipes')}>Buscar Receitas</Button>
         </div>
+      ) : filteredRecipes.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500 mb-4">Nenhuma receita encontrada com os filtros aplicados.</p>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setSearchQuery('')
+              setSelectedDiet('')
+            }}
+          >
+            Limpar Filtros
+          </Button>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {savedRecipes.map((recipe) => (
+          {filteredRecipes.map((recipe) => (
             <div
               key={recipe.id}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
@@ -118,7 +216,7 @@ export default function SavedRecipesPage() {
                       }
                     }}
                   >
-                    🗑️
+                    <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
