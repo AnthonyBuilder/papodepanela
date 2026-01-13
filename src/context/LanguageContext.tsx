@@ -121,6 +121,8 @@ const translations: Record<Locale, Record<string, string>> = {
     search: 'Search',
     desserts: 'Desserts',
     mainCourses: 'Main Courses',
+    cuisines: 'Cuisines',
+    diets: 'Diets',
   },
   pt: {
     login: 'Entrar',
@@ -231,6 +233,8 @@ const translations: Record<Locale, Record<string, string>> = {
     search: 'Pesquisa',
     desserts: 'Sobremesas',
     mainCourses: 'Pratos Principais',
+    cuisines: 'Cozinhas',
+    diets: 'Dietas',
   },
   es: {
     login: 'Iniciar sesión',
@@ -341,6 +345,8 @@ const translations: Record<Locale, Record<string, string>> = {
     search: 'Buscar',
     desserts: 'Postres',
     mainCourses: 'Platos Principales',
+    cuisines: 'Cocinas',
+    diets: 'Dietas',
   },
 }
 

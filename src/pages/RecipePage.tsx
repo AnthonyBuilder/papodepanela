@@ -5,7 +5,8 @@ import SpinnerEmpty from '@/components/SpinnerEmpty'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
 import { Button } from '@/components/ui/button'
-import { useLanguage, translateForLocale } from '@/context/LanguageContext'
+import { useLanguage } from '@/context/LanguageContext'
+import { translateIngredients, translateText, translateArray } from '@/api/freeTranslate'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
 import AdBanner from '@/components/AdBanner'
@@ -33,52 +34,57 @@ export default function RecipePage() {
         if (locale !== 'en') {
           data = { ...data }
           
-          // Traduzir título
+          // Traduzir título com IA
           if (data.title) {
-            data.title = await translateForLocale(data.title, locale as 'pt' | 'en' | 'es')
+            data.title = await translateText(data.title, locale)
           }
           
-          // Traduzir summary
+          // Traduzir summary com IA
           if (data.summary) {
             const plainSummary = data.summary.replace(/<[^>]*>/g, '')
-            const translated = await translateForLocale(plainSummary, locale as 'pt' | 'en' | 'es')
+            const translated = await translateText(plainSummary, locale)
             data.summary = `<p>${translated}</p>`
           }
           
-          // Traduzir cuisines
+          // Traduzir cuisines com IA
           if (data.cuisines && Array.isArray(data.cuisines)) {
-            data.cuisines = await Promise.all(
-              data.cuisines.map((c: string) => translateForLocale(c, locale as 'pt' | 'en' | 'es'))
-            )
+            data.cuisines = await translateArray(data.cuisines, locale)
           }
           
-          // Traduzir diets
+          // Traduzir diets com IA
           if (data.diets && Array.isArray(data.diets)) {
-            data.diets = await Promise.all(
-              data.diets.map((d: string) => translateForLocale(d, locale as 'pt' | 'en' | 'es'))
-            )
+            data.diets = await translateArray(data.diets, locale)
           }
           
-          // Traduzir instruções
+          // Traduzir ingredientes com IA (batch)
+          if (data.extendedIngredients && Array.isArray(data.extendedIngredients)) {
+            const ingredientTexts = data.extendedIngredients.map((ing: any) => ing.original || '')
+            const translatedTexts = await translateIngredients(ingredientTexts, locale)
+            data.extendedIngredients = data.extendedIngredients.map((ing: any, index: number) => ({
+              ...ing,
+              original: translatedTexts[index] || ing.original
+            }))
+          }
+          
+          // Traduzir instruções com IA
           if (data.analyzedInstructions && Array.isArray(data.analyzedInstructions)) {
             data.analyzedInstructions = await Promise.all(
               data.analyzedInstructions.map(async (instr: any) => ({
                 ...instr,
                 steps: instr.steps ? await Promise.all(
-                  instr.steps.map((step: any) => 
-                    translateForLocale(step.step, locale as 'pt' | 'en' | 'es').then(
-                      translated => ({ ...step, step: translated })
-                    )
-                  )
+                  instr.steps.map(async (step: any) => ({
+                    ...step,
+                    step: await translateText(step.step, locale)
+                  }))
                 ) : instr.steps
               }))
             )
           }
           
-          // Traduzir plain instructions
+          // Traduzir plain instructions com IA
           if (data.instructions) {
             const plainInstructions = data.instructions.replace(/<[^>]*>/g, '')
-            data.instructions = await translateForLocale(plainInstructions, locale as 'pt' | 'en' | 'es')
+            data.instructions = await translateText(plainInstructions, locale)
           }
         }
         
@@ -197,7 +203,7 @@ export default function RecipePage() {
 
         {recipe.cuisines && recipe.cuisines.length > 0 && (
           <div>
-            <h3 className="text-xl font-semibold mb-3 text-gray-800">{locale === 'pt' ? 'Cozinhas' : locale === 'es' ? 'Cocinas' : 'Cuisines'}</h3>
+            <h3 className="text-xl font-semibold mb-3 text-gray-800">{t('cuisines')}</h3>
             <div className="flex flex-wrap gap-2">
               {recipe.cuisines.map((cuisine: string) => (
                 <span key={cuisine} className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">{cuisine}</span>
@@ -208,7 +214,7 @@ export default function RecipePage() {
 
         {recipe.diets && recipe.diets.length > 0 && (
           <div>
-            <h3 className="text-xl font-semibold mb-3 text-gray-800">{locale === 'pt' ? 'Dietas' : locale === 'es' ? 'Dietas' : 'Diets'}</h3>
+            <h3 className="text-xl font-semibold mb-3 text-gray-800">{t('diets')}</h3>
             <div className="flex flex-wrap gap-2">
               {recipe.diets.map((diet: string) => (
                 <span key={diet} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">{diet}</span>
