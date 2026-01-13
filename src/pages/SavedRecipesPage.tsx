@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import { Button } from '@/components/ui/button'
 
 export default function SavedRecipesPage() {
@@ -22,6 +23,11 @@ export default function SavedRecipesPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
+      <Breadcrumbs items={[
+        { label: 'Início', onClick: () => navigate('/') },
+        { label: 'Minhas Receitas Salvas' }
+      ]} />
+      
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-800 font-noto-serif mb-2">
           Minhas Receitas Salvas

@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext'
 import { useLanguage } from '@/context/LanguageContext'
 import { generateRecipeWithAI } from '@/api/openai'
 import { Button } from '@/components/ui/button'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 
@@ -72,6 +73,11 @@ export default function AIRecipePage() {
         description={t('aiRecipe.description') || 'Use inteligência artificial para criar receitas personalizadas com seus ingredientes favoritos'}
       />
       <div className="max-w-4xl mx-auto px-4 py-10">
+        <Breadcrumbs items={[
+          { label: t('home') || 'Início', onClick: () => navigate('/') },
+          { label: t('aiRecipe.title') || 'Gerar Receita com IA' }
+        ]} />
+        
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2 flex items-center gap-3">
             <svg className="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

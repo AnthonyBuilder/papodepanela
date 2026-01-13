@@ -6,6 +6,7 @@ import { createCommunityRecipe, updateCommunityRecipe, type CommunityRecipe } fr
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { Button } from '@/components/ui/button'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 
@@ -133,6 +134,12 @@ export default function CreateRecipePage() {
         description={isEditMode ? (t('editRecipe.description') || 'Edite sua receita') : t('createRecipe.description')}
       />
       <div className="max-w-3xl mx-auto px-4 py-10">
+        <Breadcrumbs items={[
+          { label: t('home') || 'Início', onClick: () => navigate('/') },
+          { label: t('community.title') || 'Comunidade', onClick: () => navigate('/community') },
+          { label: isEditMode ? (t('editRecipe.title') || 'Editar Receita') : (t('createRecipe.title') || 'Criar Receita') }
+        ]} />
+        
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">{isEditMode ? (t('editRecipe.title') || 'Editar Receita') : t('createRecipe.title')}</h1>
           <p className="text-gray-600">{isEditMode ? (t('editRecipe.subtitle') || 'Atualize os dados da sua receita') : t('createRecipe.subtitle')}</p>

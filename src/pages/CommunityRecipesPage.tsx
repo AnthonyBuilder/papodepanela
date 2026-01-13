@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext'
 import { getCommunityRecipes, type CommunityRecipe } from '@/lib/firebase'
 import { Button } from '@/components/ui/button'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
 
 export default function CommunityRecipesPage() {
@@ -45,6 +46,11 @@ export default function CommunityRecipesPage() {
         description={t('community.description')}
       />
       <div className="max-w-6xl mx-auto px-4 py-10">
+        <Breadcrumbs items={[
+          { label: t('home') || 'Início', onClick: () => navigate('/') },
+          { label: t('community.title') || 'Comunidade' }
+        ]} />
+        
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="font-noto-serif text-3xl font-bold text-gray-800 mb-2">{t('community.title')}</h1>

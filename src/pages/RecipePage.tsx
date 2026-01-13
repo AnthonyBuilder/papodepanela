@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getRecipeInformation } from '../api/spoonacular'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
 import { Button } from '@/components/ui/button'
 import { useLanguage, translateForLocale } from '@/context/LanguageContext'
@@ -139,6 +140,12 @@ export default function RecipePage() {
         canonicalUrl={`https://papodepanela.site/recipe/${recipe.id}`}
       />
       <div className="max-w-4xl mx-auto px-4 py-10 text-gray-500">
+        <Breadcrumbs items={[
+          { label: t('home') || 'Início', onClick: () => navigate('/') },
+          { label: t('recipes') || 'Receitas', onClick: () => navigate('/') },
+          { label: recipe.title }
+        ]} />
+        
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-bold text-gray-800 font-noto-serif">{recipe.title}</h1>
           <div className="flex items-center gap-2">

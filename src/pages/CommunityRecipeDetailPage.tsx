@@ -6,6 +6,7 @@ import { doc, getDoc } from 'firebase/firestore'
 import { db, toggleLikeRecipe, deleteCommunityRecipe, type CommunityRecipe } from '@/lib/firebase'
 import { Button } from '@/components/ui/button'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
 
 export default function CommunityRecipeDetailPage() {
@@ -106,6 +107,12 @@ export default function CommunityRecipeDetailPage() {
         ogImage={recipe.image}
       />
       <div className="max-w-4xl mx-auto px-4 py-10">
+        <Breadcrumbs items={[
+          { label: t('home') || 'Início', onClick: () => navigate('/') },
+          { label: t('community.title') || 'Comunidade', onClick: () => navigate('/community') },
+          { label: recipe.title }
+        ]} />
+        
         <div className="mb-6 flex items-center justify-between">
           <Button variant="outline" onClick={() => navigate('/community')}>
             ← {t('back')}

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/context/LanguageContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import SEO from '@/components/SEO'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import { searchRecipes, type SearchFilters } from '../api/spoonacular';
 import { Filter, X } from 'lucide-react'
 
@@ -65,6 +66,12 @@ const RecipesPage: React.FC = () => {
         canonicalUrl={`https://papodepanela.site/recipes/${query}`}
       />
       <div className="max-w-4xl mx-auto px-4 py-10">
+        <Breadcrumbs items={[
+          { label: t('home') || 'Início', onClick: () => navigate('/') },
+          { label: t('search') || 'Pesquisa' },
+          { label: decodeURIComponent(query) }
+        ]} />
+        
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-semibold">
             {t('results')} "{decodeURIComponent(query)}"

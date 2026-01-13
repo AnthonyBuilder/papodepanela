@@ -1,16 +1,29 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { useLanguage } from '@/context/LanguageContext'
 import { auth } from '@/lib/firebase'
-import { LogOut, Heart, Menu, X, Search, ArrowRight, Users, Sparkles } from 'lucide-react'
+import { LogOut, Heart, Menu, X, Search, ArrowRight, Users, Sparkles, ChefHat, Cake, Lightbulb, User } from 'lucide-react'
 
 type HeaderProps = {
   onSelect?: (opt: string) => void
 }
 
+type MenuOption = {
+  label: string
+  icon: React.ReactNode
+  action: () => void
+}
+
 const Header: React.FC<HeaderProps> = ({ onSelect }) => {
-  const options = ['Receitas', 'Comunidade', 'Categorias', 'Sobre']
   const [query, setQuery] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
   const [showSearch, setShowSearch] = useState(false)
@@ -26,13 +39,42 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
 
   const { t } = useLanguage()
 
-  const handleOptionClick = (o: string) => {
-    if (o === 'Comunidade') {
-      navigate('/community')
-    } else {
-      navigate('/')
-      onSelect?.(o)
+  const menuOptions: MenuOption[] = [
+    {
+      label: 'Pratos Principais',
+      icon: <ChefHat className="w-4 h-4" />,
+      action: () => {
+        navigate('/')
+        onSelect?.('Pratos Principais')
+      }
+    },
+    {
+      label: 'Sobremesas',
+      icon: <Cake className="w-4 h-4" />,
+      action: () => {
+        navigate('/')
+        onSelect?.('Sobremesas')
+      }
+    },
+    {
+      label: 'Dicas e Bebidas',
+      icon: <Lightbulb className="w-4 h-4" />,
+      action: () => {
+        navigate('/')
+        onSelect?.('Dicas')
+      }
+    },
+    {
+      label: 'Comunidade',
+      icon: <Users className="w-4 h-4" />,
+      action: () => {
+        navigate('/community')
+      }
     }
+  ]
+
+  const handleOptionClick = (option: MenuOption) => {
+    option.action()
     setMenuOpen(false)
   }
 
@@ -57,13 +99,14 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
           </button>
 
           <nav className="hidden md:flex gap-2">
-            {options.map((o) => (
+            {menuOptions.map((option) => (
               <button
-                key={o}
-                onClick={() => handleOptionClick(o)}
-                className="px-3 py-1 opacity-80 rounded-xl hover:bg-white/20"
+                key={option.label}
+                onClick={() => handleOptionClick(option)}
+                className="px-3 py-1.5 opacity-80 rounded-xl hover:bg-white/20 flex items-center gap-1.5 transition-all hover:opacity-100"
               >
-                {o}
+                {option.icon}
+                <span>{option.label}</span>
               </button>
             ))}
           </nav>
@@ -85,20 +128,40 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
                   <Sparkles className="w-4 h-4" />
                   IA
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-1" 
-                  onClick={() => navigate('/saved')}
-                >
-                  <Heart className="w-4 h-4" />
-                  Salvas
-                </Button>
-                <span className="text-sm text-gray-600">{auth.currentUser.displayName}</span>
-                <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-1" onClick={() => auth.signOut().then(() => navigate('/'))}>
-                  <LogOut className="w-4 h-4" />
-                  {t('logout')}
-                </Button>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="bg-white/90 text-gray-600 text-md rounded-xl flex items-center gap-2 h-auto px-3 py-1.5"
+                    >
+                      <User className="w-4 h-4" />
+                      <span className="hidden md:inline">{auth.currentUser.displayName}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 bg-white">
+                    <DropdownMenuLabel className="text-gray-800">
+                      {auth.currentUser.displayName || auth.currentUser.email}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/saved')}
+                      className="cursor-pointer text-gray-700 focus:bg-gray-100"
+                    >
+                      <Heart className="w-4 h-4 mr-2" />
+                      {t('savedRecipes') || 'Receitas Salvas'}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => auth.signOut().then(() => navigate('/'))}
+                      className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      {t('logout')}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : 
              <Button variant="ghost" size="sm" className="bg-white/90 text-gray-600 text-md rounded-xl" onClick={() => navigate('/login')}>
@@ -140,13 +203,14 @@ const Header: React.FC<HeaderProps> = ({ onSelect }) => {
       {menuOpen && (
         <div className="sm:hidden px-4 pb-4 space-y-3">
           <div className="flex flex-col gap-2">
-            {options.map((o) => (
+            {menuOptions.map((option) => (
               <button
-                key={o}
-                onClick={() => handleOptionClick(o)}
-                className="w-full text-left px-3 py-2 rounded-lg bg-white/70 text-gray-800 border"
+                key={option.label}
+                onClick={() => handleOptionClick(option)}
+                className="w-full text-left px-3 py-3 rounded-lg bg-white/70 text-gray-800 border flex items-center gap-2 hover:bg-white/90 transition-all"
               >
-                {o}
+                {option.icon}
+                <span className="font-medium">{option.label}</span>
               </button>
             ))}
           </div>

@@ -274,4 +274,36 @@ export async function getDessertRecipes(number = 6, language = 'en') {
   }
 }
 
+export async function getMainCourseRecipes(number = 9, language = 'en') {
+  const key = `maincourse:${number}:${language}`
+
+  if (categoryCache.has(key)) return categoryCache.get(key)!
+
+  if (categoryPromiseCache.has(key)) return categoryPromiseCache.get(key)!
+
+  const promise = (async () => {
+    const res = await client.get('/recipes/complexSearch', {
+      params: {
+        number,
+        type: 'main course',
+        addRecipeInformation: true,
+        language,
+      },
+    })
+    const recipes = res.data?.results ?? []
+    categoryCache.set(key, recipes)
+    return recipes
+  })()
+
+  categoryPromiseCache.set(key, promise)
+  try {
+    const result = await promise
+    categoryPromiseCache.delete(key)
+    return result
+  } catch (e) {
+    categoryPromiseCache.delete(key)
+    throw e
+  }
+}
+
 export default client
