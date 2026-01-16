@@ -10,6 +10,7 @@ import { translateIngredients, translateText, translateArray } from '@/api/freeT
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
 import AdBanner from '@/components/AdBanner'
+import HighPerformanceAd from '@/components/HighPerformanceAd'
 
 export default function RecipePage() {
   const { id } = useParams<{ id: string }>()
@@ -151,6 +152,8 @@ export default function RecipePage() {
           { label: t('recipes') || 'Receitas', onClick: () => navigate('/') },
           { label: recipe.title }
         ]} />
+        
+        <HighPerformanceAd adKey="e67f6920f88a8eb5c739bca3676559a5" />
         
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-bold text-gray-800 font-noto-serif">{recipe.title}</h1>
