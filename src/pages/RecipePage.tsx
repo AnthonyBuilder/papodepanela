@@ -153,7 +153,9 @@ export default function RecipePage() {
           { label: recipe.title }
         ]} />
         
-        <HighPerformanceAd adKey="e67f6920f88a8eb5c739bca3676559a5" />
+        <div className="my-6 flex justify-center w-full overflow-hidden">
+          <HighPerformanceAd adKey="e67f6920f88a8eb5c739bca3676559a5" />
+        </div>
         
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-bold text-gray-800 font-noto-serif">{recipe.title}</h1>
@@ -249,7 +251,9 @@ export default function RecipePage() {
         )}
       </div>
     </div>
-    <AdBanner />
+    <div className="my-8 flex justify-center w-full">
+      <AdBanner />
+    </div>
     </>
   )
 }
