@@ -28,13 +28,15 @@ export default function AdBanner({
   }, []);
 
   return (
-    <ins 
-      className="adsbygoogle"
-      style={style}
-      data-ad-client="ca-pub-6045768913014450"
-      data-ad-slot={slot}
-      data-ad-format={format}
-      data-full-width-responsive={responsive.toString()}
-    />
+    <div className="w-full max-w-full overflow-hidden px-2 md:px-0">
+      <ins 
+        className="adsbygoogle"
+        style={{ ...style, maxWidth: '100%' }}
+        data-ad-client="ca-pub-6045768913014450"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive={responsive.toString()}
+      />
+    </div>
   );
 }

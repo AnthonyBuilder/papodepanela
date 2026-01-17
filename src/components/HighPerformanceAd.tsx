@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface HighPerformanceAdProps {
   adKey: string;
@@ -21,16 +21,32 @@ export default function HighPerformanceAd({
 }: HighPerformanceAdProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scriptLoadedRef = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (scriptLoadedRef.current || !containerRef.current) return;
+
+    // Ajustar dimensões para mobile
+    const responsiveWidth = isMobile ? Math.min(width, window.innerWidth - 40) : width;
+    const responsiveHeight = isMobile ? Math.min(height, 60) : height;
 
     // Set ad options
     window.atOptions = {
       'key': adKey,
       'format': format,
-      'height': height,
-      'width': width,
+      'height': responsiveHeight,
+      'width': responsiveWidth,
       'params': {}
     };
 
@@ -50,16 +66,18 @@ export default function HighPerformanceAd({
       }
       scriptLoadedRef.current = false;
     };
-  }, [adKey, format, height, width]);
+  }, [adKey, format, height, width, isMobile]);
 
   return (
     <div 
       ref={containerRef}
+      className="mx-auto overflow-hidden"
       style={{ 
         textAlign: 'center',
-        margin: '10px 0',
-        minHeight: `${height}px`,
-        minWidth: `${width}px`
+        margin: '10px auto',
+        maxWidth: '100%',
+        minHeight: isMobile ? '60px' : `${height}px`,
+        width: isMobile ? '100%' : `${width}px`
       }}
     />
   );
