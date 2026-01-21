@@ -508,6 +508,15 @@ function HomePage({ selected }: { selected: string | null }) {
                         ))}
                       </div>
                     )}
+                    
+                    {/* Ad Banner */}
+                    <div className="mt-12 flex justify-center">
+                      <HighPerformanceAd 
+                        adKey="15586333f6ad04e735de6b63942e67f2" 
+                        height={90} 
+                        width={728} 
+                      />
+                    </div>
                   </div>
                 )}
 
@@ -539,6 +548,15 @@ function HomePage({ selected }: { selected: string | null }) {
                         ))}
                       </div>
                     )}
+                    
+                    {/* Ad Banner */}
+                    <div className="mt-12 flex justify-center">
+                      <HighPerformanceAd 
+                        adKey="15586333f6ad04e735de6b63942e67f2" 
+                        height={90} 
+                        width={728} 
+                      />
+                    </div>
                   </div>
                 )}
 
@@ -616,6 +634,15 @@ function HomePage({ selected }: { selected: string | null }) {
                           </p>
                         </div>
                       </div>
+                    </div>
+                    
+                    {/* Ad Banner */}
+                    <div className="mt-12 flex justify-center">
+                      <HighPerformanceAd 
+                        adKey="15586333f6ad04e735de6b63942e67f2" 
+                        height={90} 
+                        width={728} 
+                      />
                     </div>
                   </div>
                 )}
