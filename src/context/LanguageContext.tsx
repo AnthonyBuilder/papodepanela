@@ -352,14 +352,42 @@ const translations: Record<Locale, Record<string, string>> = {
 
 const LangContext = createContext<LangContextType | undefined>(undefined)
 
+// Detecta o idioma do navegador do usuário
+const detectBrowserLanguage = (): Locale => {
+  // Tenta obter o idioma do localStorage primeiro
+  const savedLocale = localStorage.getItem('preferredLocale')
+  if (savedLocale && ['en', 'pt', 'es'].includes(savedLocale)) {
+    return savedLocale as Locale
+  }
+
+  // Detecta o idioma do navegador
+  const browserLang = navigator.language || (navigator as any).userLanguage
+  const langCode = browserLang.toLowerCase().split('-')[0]
+
+  // Mapeia os códigos de idioma para os locales suportados
+  const langMap: Record<string, Locale> = {
+    'pt': 'pt', // Português
+    'en': 'en', // Inglês
+    'es': 'es', // Espanhol
+  }
+
+  return langMap[langCode] || 'pt' // Padrão: português
+}
+
 export const LanguageProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  const [locale, setLocale] = useState<Locale>('pt')
+  const [locale, setLocale] = useState<Locale>(detectBrowserLanguage)
 
   const t = (key: string) => translations[locale]?.[key] ?? key
 
+  const handleSetLocale = (l: Locale) => {
+    setLocale(l)
+    // Salva a preferência do usuário no localStorage
+    localStorage.setItem('preferredLocale', l)
+  }
+
   const value: LangContextType = {
     locale,
-    setLocale: (l: Locale) => setLocale(l),
+    setLocale: handleSetLocale,
     t,
     translateUI: t,
   }
