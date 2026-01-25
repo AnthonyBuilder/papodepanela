@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
+import CylindricalAd from '@/components/CylindricalAd'
 
 export default function CommunityRecipesPage() {
   const { t } = useLanguage()
@@ -60,6 +61,8 @@ export default function CommunityRecipesPage() {
             {t('community.createRecipe')}
           </Button>
         </div>
+
+        <CylindricalAd className="mb-8" />
 
         {recipes.length === 0 ? (
           <div className="text-center py-12">

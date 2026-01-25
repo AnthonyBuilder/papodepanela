@@ -5,6 +5,7 @@ import { useLanguage } from '@/context/LanguageContext'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import SEO from '@/components/SEO'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import CylindricalAd from '@/components/CylindricalAd'
 import { searchRecipes, type SearchFilters } from '../api/spoonacular';
 import { Filter, X } from 'lucide-react'
 
@@ -223,6 +224,8 @@ const RecipesPage: React.FC = () => {
             </div>
           </div>
         )}
+
+        <CylindricalAd className="my-6" />
 
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {recipes.length === 0 && (

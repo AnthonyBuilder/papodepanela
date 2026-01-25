@@ -11,6 +11,7 @@ import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
 import AdBanner from '@/components/AdBanner'
 import HighPerformanceAd from '@/components/HighPerformanceAd'
+import CylindricalAd from '@/components/CylindricalAd'
 
 export default function RecipePage() {
   const { id } = useParams<{ id: string }>()
@@ -205,6 +206,8 @@ export default function RecipePage() {
             </ul>
           </div>
         )}
+
+        <CylindricalAd className="my-6" />
 
         {recipe.cuisines && recipe.cuisines.length > 0 && (
           <div>

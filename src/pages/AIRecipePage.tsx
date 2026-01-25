@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
+import CylindricalAd from '@/components/CylindricalAd'
 
 export default function AIRecipePage() {
   const { user } = useAuth()
@@ -241,6 +242,8 @@ export default function AIRecipePage() {
                   </ul>
                 </div>
               )}
+
+              <CylindricalAd className="my-6" />
 
               {generatedRecipe.instructions && generatedRecipe.instructions.length > 0 && (
                 <div className="mb-6">
