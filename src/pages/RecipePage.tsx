@@ -9,7 +9,6 @@ import { useLanguage } from '@/context/LanguageContext'
 import { translateIngredients, translateText, translateArray } from '@/api/freeTranslate'
 import { useSavedRecipes } from '@/context/SavedRecipesContext'
 import { useAuth } from '@/context/AuthContext'
-import AdBanner from '@/components/AdBanner'
 import HighPerformanceAd from '@/components/HighPerformanceAd'
 import CylindricalAd from '@/components/CylindricalAd'
 
@@ -253,9 +252,6 @@ export default function RecipePage() {
           </div>
         )}
       </div>
-    </div>
-    <div className="my-8 flex justify-center w-full">
-      <AdBanner />
     </div>
     </>
   )

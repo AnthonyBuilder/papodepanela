@@ -6,6 +6,7 @@ import SpinnerEmpty from '@/components/SpinnerEmpty'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { Button } from '@/components/ui/button'
 import { Search, X, Filter, Trash2 } from 'lucide-react'
+import CylindricalAd from '@/components/CylindricalAd'
 
 export default function SavedRecipesPage() {
   const navigate = useNavigate()
@@ -143,6 +144,8 @@ export default function SavedRecipesPage() {
           </Button>
         </div>
       ) : (
+        <>
+        <CylindricalAd className="mb-8" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredRecipes.map((recipe) => (
             <div
@@ -223,6 +226,7 @@ export default function SavedRecipesPage() {
             </div>
           ))}
         </div>
+        </>
       )}
     </div>
   )

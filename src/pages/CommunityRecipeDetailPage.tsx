@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import SpinnerEmpty from '@/components/SpinnerEmpty'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import SEO from '@/components/SEO'
+import CylindricalAd from '@/components/CylindricalAd'
 
 export default function CommunityRecipeDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -221,6 +222,8 @@ export default function CommunityRecipeDetailPage() {
             ))}
           </ul>
         </div>
+
+        <CylindricalAd className="my-6" />
 
         <div className="bg-white rounded-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('instructions')}</h2>
